@@ -3,11 +3,37 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from labanmanagement.models import *
+
+
+
+
+
+#?###########################################################
+#?###########################################################
+#!######################### VIEWS ###########################
+#!#####################START FROM HERE#######################
+#?###########################################################
+#?###########################################################
+
+# TODO: when customer table is updated, daily total milk record doesnt get updated
 
 @login_required(login_url='/login')
 def dashboard(request):
-    
-    return render(request,'dashboard.html')
+    dailyMilkObjects = DailyTotalMilk.objects
+    total_milk_today = dailyMilkObjects.last().total_milk
+    sold_milk_today = dailyMilkObjects.last().sold_milk
+    unsold = dailyMilkObjects.last().remaining_milk
+    prev_day = (dailyMilkObjects.all().order_by("-date").exclude(id=dailyMilkObjects.last().id).first().total_milk)
+    percentage_prev_day = ((total_milk_today - prev_day)/prev_day) * 100
+    context = {
+        "total": total_milk_today,
+        "sold" : sold_milk_today,
+        "unsold" : unsold,
+        "percentage" : percentage_prev_day,
+    }
+    print(percentage_prev_day)
+    return render(request,'dashboard.html', context)
 
 def customers(request):
     return HttpResponse('this is the customers page')
