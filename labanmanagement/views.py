@@ -4,8 +4,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from labanmanagement.models import *
-import datetime
+from datetime import date
+from django.db.models import F, Sum
+from django.db.models.functions import Coalesce
+from django.db.models import OuterRef, Subquery
 
+# TODO: Make pages for the navigations
+# ///!BUG: FIX the alignment of the cards in dashboard.html
+# !BUG: When customer table is updated, daily total milk record doesnt get updated
+# TODO: Test the website
+# TODO: Add filter to the charts
+# TODO: Automatic Backup of Database everyday
+# TODO: Downloadable data in excel
 
 #?###########################################################
 #?###########################################################
@@ -14,42 +24,64 @@ import datetime
 #?###########################################################
 #?###########################################################
 
-# TODO: when customer table is updated, daily total milk record doesnt get updated
+today = date.today()
 
 @login_required(login_url='/login')
 def dashboard(request):
+    print(today)
     dailyMilkObjects = DailyTotalMilk.objects
-    total_milk_today = dailyMilkObjects.last().total_milk
-    sold_milk_today = dailyMilkObjects.last().sold_milk
-    unsold = dailyMilkObjects.last().remaining_milk
+    total_milk_today = dailyMilkObjects.filter(date=today).values_list('total_milk', flat=True).aggregate(sum=models.Sum('total_milk'))['sum'] or 0
+    sold_milk_today =dailyMilkObjects.filter(date=today).values_list('sold_milk', flat=True).aggregate(sum=models.Sum('sold_milk'))['sum'] or 0
+    unsold = dailyMilkObjects.filter(date=today).values_list('remaining_milk', flat=True).aggregate(sum=models.Sum('remaining_milk'))['sum'] or 0   
     prev_day = (dailyMilkObjects.all().order_by(
-        "-date").exclude(id=dailyMilkObjects.last().id).first().total_milk)
+        "-date").exclude(id=dailyMilkObjects.last().id).first().total_milk)    #!++++++++++++++Red flag++++++++++++++++++
     percentage_prev_day = ((total_milk_today - prev_day)/prev_day) * 100
-    today = datetime.date.today()
+    pay_as_you_go_quantity = PayAsYouGoCustomer.objects.filter(
+        date=today).aggregate(total_qty=models.Sum('qty'))["total_qty"]
     subscription_sold_quantity = HandleCustomer.objects.filter(
         date=today).aggregate(total_qty=models.Sum('qty'))['total_qty']
-    pay_as_you_go_customers = PayAsYouGoCustomer.objects.filter(
-        date=today).aggregate(total_qty=models.Sum('qty'))["total_qty"]
     customers = Customer.objects.all().count()
-    pay_as_you_buy_customers = PayAsYouGoCustomer.objects.filter(date=today).count()
-    pending_payment_customers = Customer.objects.filter(handlecustomer__balance__gt=0).count()
-    pending_payment_payasyougo = PayAsYouGoCustomer.objects.filter(balance__gt=0).count()
+    pay_as_you_go_customers = PayAsYouGoCustomer.objects.filter(
+        date=today).count()
+    pending_payment_customers = Customer.objects.filter(
+        handlecustomer__balance__gt=0).count()
+    pending_payment_payasyougo = PayAsYouGoCustomer.objects.filter(
+        balance__gt=0).count()
     pending_payments = pending_payment_customers + pending_payment_payasyougo
-    pending_amount_customers = HandleCustomer.objects.all() #TODO complete this 
-    print(pending_amount_customers)
 
+    '''
+    The below code is as good as executing this SQL query 
+    
+    SELECT max(id), laag_account_id, balance, date
+    FROM labanmanagement_handlecustomer 
+    group by laag_account_id;
+
+    '''
+    latest_ids = HandleCustomer.objects.filter(laag_account=OuterRef('laag_account')).values('laag_account').annotate(
+    latest_id=models.Max('id')).values('latest_id')
+
+    latest_records = HandleCustomer.objects.filter(id__in=Subquery(latest_ids))
+
+    balanceCustomer = latest_records.values('id', 'laag_account__id', 'balance', 'date').aggregate(balance=models.Sum('balance'))['balance']
+    balancePayAsYouGo = PayAsYouGoCustomer.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum']
+    balance = balancePayAsYouGo + balanceCustomer
+    revenue= Revenue.objects.filter(date=today).values_list('revenue', flat=True).aggregate(sum=models.Sum('revenue'))['sum'] or 0
+    expenditure = Expenditure.objects.filter(date=today).values('amount').aggregate(sum=models.Sum('amount'))['sum'] 
+    
     context = {
-        "total": total_milk_today,
-        "sold": sold_milk_today,
-        "unsold": unsold,
-        "percentage": percentage_prev_day,
-        "subcription": subscription_sold_quantity,
-        "payasyougo": pay_as_you_go_customers,
-        "customers": customers,
-        "payasyougocustomers":pay_as_you_buy_customers,
-        "pendingpayments": pending_payments,
+    "total": total_milk_today,
+    "sold": sold_milk_today,
+    "unsold": unsold,
+    "percentage": percentage_prev_day,
+    "subcription": subscription_sold_quantity,
+    "payasyougoqty": pay_as_you_go_quantity,
+    "customers": customers,
+    "payasyougocustomers": pay_as_you_go_customers,
+    "pendingpayments": pending_payments,
+    "balance":balance,
+    "revenue":revenue,
+    "expenditure":expenditure,
     }
-    print(percentage_prev_day)
     return render(request, 'dashboard.html', context)
 
 

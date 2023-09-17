@@ -1,379 +1,398 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% block title %}Dashboard{% endblock title %}
-{% block body %}
+{%block body %}
 <!-- your dashboard body here-->
 <div class="container-fluid">
-
-    <!-- Page Heading
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    </div> -->
-
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Milk (Today)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{total}} ltr</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Milk (Today)
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{total}} ltr
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Milk Sold</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{sold}} ltr</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Milk Sold
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{sold}} ltr
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Milk Unsold</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{unsold}} ltr</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Milk Unsold
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{unsold}} ltr
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">% Milk
-                                w.r.t Yesterday
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{percentage}}%</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-info text-uppercase mb-1"
+              >
+                % Milk w.r.t Yesterday
+              </div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                    {{percentage}}%
+                  </div>
                 </div>
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-
-
-        <!-- Content Row -->
-        <div class="row">
-            <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Subscription</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{subcription}} ltr</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Subscription
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{subcription}} ltr
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Pay-as-you-buy</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{payasyougo}} ltr</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Pay-as-you-go(today)
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{payasyougoqty}} ltr
+              </div>
             </div>
+            <div class="col-auto">
+              <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Subscription Accounts</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{customers}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-book-open fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-info text-uppercase mb-1"
+              >
+                Subscription Accounts
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{customers}}
+              </div>
             </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Pay-as-you-buy Customers</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{payasyougocustomers}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-auto">
+              <i class="fas fa-book-open fa-2x text-gray-300"></i>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Pay-as-you-go(today)
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{payasyougocustomers}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+              >
+                Pending Payments
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{pendingpayments}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+              >
+                Pending Amount
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                Rs {{balance}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Today's Revenue
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                Rs {{revenue}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+              >
+                Today's Expenditure
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                Rs {{expenditure}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Bar Chart Column -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">
+                    Milk per Cow (ltr)
+                </h6>
+            </div>
+            <canvas id="barChart"></canvas>
+            <script>
+                // JavaScript code
+  document.addEventListener("DOMContentLoaded", function () {
+    const data = {
+      labels: ["685", "550", "271", "297", "377", "628", "397"],
+      datasets: [
+        {
+          label: "Today",
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+          data: [10, 15, 8, 12, 10, 10, 12],
+        },
+        {
+          label: "Yesterday",
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          data: [7, 12, 6, 10, 15, 12, 10, 0],
+        },
+      ],
+    };
+
+    // Bar chart configuration
+    const config = {
+      type: "bar",
+      data: data,
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            ticks: {
+              stepSize: 1, // Customize the interval between ticks
+            },
+          },
+        },
+      },
+    };
+
+    // Create the chart
+    const barChart = new Chart(document.getElementById("barChart"), config);
+  });
+            </script>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Payments</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{pendingpayments}}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+
+    <!-- Doughnut Chart Column -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">
+                    Today's Milk Sales Breakdown (litres)
+                </h6>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <canvas id="doughnutChart"></canvas>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Pending Amount(Rs)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">3000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Today's Revenue</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">4000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Today's Expenditure</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">1000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <script>
+                 // JavaScript code
+              document.addEventListener("DOMContentLoaded", function () {
+                const data = [{{ subcription }}, {{ payasyougoqty }}, {{ unsold }}];
+            const labels = ["Customer", "Pay-as-you-go", "Not sold"];
+
+            // Doughnut chart configuration
+            const config = {
+                type: "doughnut",
+                data: {
+                    datasets: [
+                        {
+                            data: data,
+                            backgroundColor: [
+                                "rgba(75, 192, 192, 0.6)",
+                                "rgba(255, 99, 132, 0.6)",
+                                "rgba(255, 206, 86, 0.6)",
+                            ],
+                            borderColor: [
+                                "rgba(75, 192, 192, 1)",
+                                "rgba(255, 99, 132, 1)",
+                                "rgba(255, 206, 86, 1)",
+                            ],
+                            borderWidth: 1,
+                        },
+                    ],
+                    labels: labels,
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: "bottom", // You can change the legend position here
+                    },
+                },
+            };
+
+            // Create the chart
+            const doughnutChart = new Chart(
+                document.getElementById("doughnutChart"),
+                config
+            );
+});
+            </script>
         </div>
     </div>
-    <div class="row">
-
-
-        <!-- Content Row -->
-        <div class="row">
-
-            <!-- Content Column -->
-            <div class="col-lg-6 mb-4">
-
-                <!-- Project Card Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-success">Milk per Cow (ltr)</h6>
-                    </div>
-                    <!-- <style>
-                        /* Adjust canvas size for mobile */
-                        @media (max-width: 576px) {
-                            canvas#barChart #doughnutChart {
-                                max-width: 100%;
-                            }
-                        }
-                    </style> -->
-                    <canvas id="barChart"></canvas>
-                    <!-- bargraph -->
-                    <script>
-                        // JavaScript code
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const data = {
-                                labels: ['685', '550', '271', '297', '377', '628', '397'],
-                                datasets: [
-                                    {
-                                        label: 'Today',
-                                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1,
-                                        data: [10, 15, 8, 12, 10, 10, 12]
-                                    },
-                                    {
-                                        label: 'Yesterday',
-                                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                                        borderColor: 'rgba(255, 99, 132, 1)',
-                                        borderWidth: 1,
-                                        data: [7, 12, 6, 10, 15, 12, 10, 0],
-                                    }
-                                ],
-                            };
-
-                            // Bar chart configuration
-                            const config = {
-                                type: 'bar',
-                                data: data,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            min: 0,
-                                            ticks: {
-                                                stepSize: 1, // Customize the interval between ticks
-                                            },
-                                        }
-                                    }
-                                }
-                            };
-
-                            // Create the chart
-                            const barChart = new Chart(document.getElementById('barChart'), config);
-                        });
-                    </script>
-                </div>
-
-
-            </div>
-
-
-            <!-- doughnut chart-->
-            <div class="col-lg-6 mb-4">
-
-                <!-- Illustrations -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-success">Today's Notes</h6>
-                    </div>
-                    <div class="card-body">
-
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae vel
-                            accusantium fugiat dolorem, minima reiciendis, culpa ipsum earum explicabo
-                            mollitia optio repellendus? Reiciendis soluta culpa sed tempora perspiciatis
-                            non nostrum.
-                            Culpa temporibus mollitia commodi. Quas labore amet consequatur officia
-                            illum eius eaque doloremque consectetur ut, aliquid id culpa suscipit omnis
-                            modi, obcaecati itaque eligendi doloribus odit eveniet numquam ullam
-                            veritatis?
-                        </p>
-
-                    </div>
-                </div>
-                <div class="card shadow mb-4 container mt-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-success">Doughnut Chart of Milk (Today)</h6>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <canvas id="doughnutChart"></canvas>
-                        </div>
-                    </div>
-                    <script>
-                        // JavaScript code
-                        document.addEventListener('DOMContentLoaded', function () {
-                            // Sample data and labels
-                            const data = [20, 10, 40];
-                            const labels = ['Laag', 'Pay-as-you-go', 'Not sold'];
-
-                            // Doughnut chart configuration
-                            const config = {
-                                type: 'doughnut',
-                                data: {
-                                    datasets: [{
-                                        data: data,
-                                        backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(255, 206, 86, 0.6)'],
-                                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
-                                        borderWidth: 1,
-                                    }],
-                                    labels: labels,
-                                },
-                                options: {
-                                    responsive: true,
-                                    legend: {
-                                        display: true,
-                                        position: 'bottom', // You can change the legend position here
-                                    }
-                                }
-                            };
-
-                            // Create the chart
-                            const doughnutChart = new Chart(document.getElementById('doughnutChart'), config);
-                        });
-                    </script>
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-    <!-- /.container-fluid -->
+</div>
 
 </div>
-{% endblock body %}
+{% endblock body %} 

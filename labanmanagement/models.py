@@ -279,7 +279,8 @@ class Revenue(models.Model):
 
 
 class Expenditure(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField(auto_now=False)
     particulars = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=3)
     remarks = models.TextField(max_length=150)

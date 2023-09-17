@@ -73,8 +73,8 @@ class RevenueAdmin(admin.ModelAdmin):
     search_fields = ['date', 'revenue']
 
 class ExpenditureAdmin(admin.ModelAdmin):
-    list_display=['date', 'particulars','amount','remarks']
-    search_fields=['date', 'particulars','amount','remarks']
+    list_display=['date','time', 'particulars','amount','remarks']
+    search_fields=['date','time', 'particulars','amount','remarks']
 
 admin.site.register(PayAsYouGoCustomer,PayAsYouGoAdmin)
 admin.site.register(HandleCustomer, HandleCustomerAdmin)
