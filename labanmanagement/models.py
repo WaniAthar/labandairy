@@ -226,9 +226,12 @@ class DailyTotalMilk(models.Model):
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty'] or 0
 
         sold_milk_handle_customer = HandleCustomer.objects.filter(
-            date=date).aggregate(total_qty=models.Sum('qty'))['total_qty'] or 0
+            date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
 
+        print(sold_milk_handle_customer)
+        print(sold_milk_pay_as_you_go)
         total_sold = sold_milk_pay_as_you_go + sold_milk_handle_customer
+        print(total_sold)
 
         # Create or get the DailyTotalMilk instance for the date
         daily_total, created = cls.objects.get_or_create(date=date)
@@ -237,6 +240,7 @@ class DailyTotalMilk(models.Model):
         daily_total.total_milk = total_milk
         daily_total.sold_milk = total_sold
         daily_total.remaining_milk = total_milk - total_sold
+        print(daily_total.remaining_milk)
 
         daily_total.save()
 
@@ -288,9 +292,18 @@ class Expenditure(models.Model):
     def __str__(self) -> str:
         return f"{self.date} {self.particulars} {self.amount}"
 
-#    -------------------------Django Signals------------------------------
+#?###########################################################################
+#?###########################################################################
+#!########################### Django Signals ################################
+#!############################# Start Here ##################################
+#?###########################################################################
+#?###########################################################################
 @receiver(post_save, sender=MilkProduction)
 @receiver(post_delete, sender=MilkProduction)
+@receiver(post_save, sender=HandleCustomer)
+@receiver(post_save, sender=PayAsYouGoCustomer)
+@receiver(post_delete, sender=HandleCustomer)
+@receiver(post_delete, sender=PayAsYouGoCustomer)
 def update_daily_total_milk(sender, instance, **kwargs):
     date = instance.date
     DailyTotalMilk.update_daily_total(date)

@@ -1,10 +1,12 @@
+import os
 from pathlib import Path
 from django.core.checks import messages
 from django.contrib.messages import constants as messages
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-idt!%cs8)$9k@of@ku7f-ly+xqj8c6jm@vk5avlh9y!*j$1@8w'
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
@@ -73,7 +75,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-uk'
 
 TIME_ZONE = 'Asia/Kolkata'
 
@@ -85,9 +87,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static"
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 MESSAGE_TAGS = {
     messages.ERROR : "danger"
 }

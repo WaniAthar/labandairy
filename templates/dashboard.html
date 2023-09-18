@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}Dashboard{% endblock title %}
 {%block body %}
 <!-- your dashboard body here-->
@@ -11,9 +11,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Milk (Today)
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -34,9 +32,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Milk Sold
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -55,9 +51,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Milk Unsold
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -78,9 +72,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-info text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                 % Milk w.r.t Yesterday
               </div>
               <div class="row no-gutters align-items-center">
@@ -108,13 +100,11 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Subscription
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
-                {{subcription}} ltr
+                {{subcription}}ltr
               </div>
             </div>
             <div class="col-auto">
@@ -130,9 +120,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Pay-as-you-go(today)
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -152,9 +140,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-info text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                 Subscription Accounts
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -173,9 +159,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Pay-as-you-go(today)
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -196,9 +180,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-warning text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                 Pending Payments
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -217,9 +199,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-danger text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                 Pending Amount
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -238,9 +218,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-success text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                 Today's Revenue
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -259,9 +237,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div
-                class="text-xs font-weight-bold text-danger text-uppercase mb-1"
-              >
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                 Today's Expenditure
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
@@ -279,120 +255,120 @@
   <div class="row">
     <!-- Bar Chart Column -->
     <div class="col-lg-6 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">
-                    Milk per Cow (ltr)
-                </h6>
-            </div>
-            <canvas id="barChart"></canvas>
-            <script>
-                // JavaScript code
-  document.addEventListener("DOMContentLoaded", function () {
-    const data = {
-      labels: ["685", "550", "271", "297", "377", "628", "397"],
-      datasets: [
-        {
-          label: "Today",
-          backgroundColor: "rgba(75, 192, 192, 0.6)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-          data: [10, 15, 8, 12, 10, 10, 12],
-        },
-        {
-          label: "Yesterday",
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-          data: [7, 12, 6, 10, 15, 12, 10, 0],
-        },
-      ],
-    };
-
-    // Bar chart configuration
-    const config = {
-      type: "bar",
-      data: data,
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            min: 0,
-            ticks: {
-              stepSize: 1, // Customize the interval between ticks
-            },
-          },
-        },
-      },
-    };
-
-    // Create the chart
-    const barChart = new Chart(document.getElementById("barChart"), config);
-  });
-            </script>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-success">Milk per Cow (ltr)</h6>
         </div>
-    </div>
-
-    <!-- Doughnut Chart Column -->
-    <div class="col-lg-6 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">
-                    Today's Milk Sales Breakdown (litres)
-                </h6>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <canvas id="doughnutChart"></canvas>
-                </div>
-            </div>
-            <script>
-                 // JavaScript code
-              document.addEventListener("DOMContentLoaded", function () {
-                const data = [{{ subcription }}, {{ payasyougoqty }}, {{ unsold }}];
-            const labels = ["Customer", "Pay-as-you-go", "Not sold"];
-
-            // Doughnut chart configuration
-            const config = {
-                type: "doughnut",
-                data: {
-                    datasets: [
-                        {
-                            data: data,
-                            backgroundColor: [
-                                "rgba(75, 192, 192, 0.6)",
-                                "rgba(255, 99, 132, 0.6)",
-                                "rgba(255, 206, 86, 0.6)",
-                            ],
-                            borderColor: [
-                                "rgba(75, 192, 192, 1)",
-                                "rgba(255, 99, 132, 1)",
-                                "rgba(255, 206, 86, 1)",
-                            ],
-                            borderWidth: 1,
-                        },
-                    ],
-                    labels: labels,
+        <canvas id="barChart"></canvas>
+        <script>
+          // JavaScript code
+          document.addEventListener("DOMContentLoaded", function () {
+            const data = {
+              labels: [{% for label in cow_data.tagId %}{{ label }
+          }, {% endfor %}],
+            datasets: [
+            {
+              label: "Today",
+              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+              data: [{% for data in cow_data.todayMilkPerCow %}{{ data }}, {% endfor %}],
                 },
-                options: {
-                    responsive: true,
-                    legend: {
-                        display: true,
-                        position: "bottom", // You can change the legend position here
-                    },
+            {
+              label: "Yesterday",
+              backgroundColor: "rgba(255, 99, 132, 0.6)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 1,
+              data: [{% for data in cow_data.yesterdayMilkPerCow %}{{ data }}, {% endfor %}],
                 },
+              ],
             };
 
-            // Create the chart
-            const doughnutChart = new Chart(
-                document.getElementById("doughnutChart"),
-                config
-            );
-});
-            </script>
-        </div>
-    </div>
-</div>
+          // Bar chart configuration
+          const config = {
+            type: "bar",
+            data: data,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  min: 0,
+                  ticks: {
+                    stepSize: 1, // Customize the interval between ticks
+                  },
+                },
+              },
+            },
+          };
 
+          // Create the chart
+          const barChart = new Chart(
+            document.getElementById("barChart"),
+            config
+          );
+          });
+        </script>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-success">
+            Today's Milk Sales Breakdown (litres)
+          </h6>
+        </div>
+        <div class="row">
+          <div class="col">
+            <canvas id="doughnutChart"></canvas>
+          </div>
+        </div>
+        <script>
+          // JavaScript code
+          document.addEventListener("DOMContentLoaded", function () {
+            const data = [{{ subcription }}, {{ payasyougoqty }}, {{ unsold }}];
+          const labels = ["Customer", "Pay-as-you-go", "Not sold"];
+
+          // Doughnut chart configuration
+          const config = {
+            type: "doughnut",
+            data: {
+              datasets: [
+                {
+                  data: data,
+                  backgroundColor: [
+                    "rgba(75, 192, 192, 0.6)",
+                    "rgba(255, 99, 132, 0.6)",
+                    "rgba(255, 206, 86, 0.6)",
+                  ],
+                  borderColor: [
+                    "rgba(75, 192, 192, 1)",
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(255, 206, 86, 1)",
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+              labels: labels,
+            },
+            options: {
+              responsive: true,
+              legend: {
+                display: true,
+                position: "bottom", // You can change the legend position here
+              },
+            },
+          };
+
+          // Create the chart
+          const doughnutChart = new Chart(
+            document.getElementById("doughnutChart"),
+            config
+          );
+          });
+        </script>
+      </div>
+    </div>
+  </div>
 </div>
-{% endblock body %} 
+{% endblock body %}
