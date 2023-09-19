@@ -42,8 +42,11 @@ def dashboard(request):
     sold_milk_today =dailyMilkObjects.filter(date=today).values_list('sold_milk', flat=True).aggregate(sum=models.Sum('sold_milk'))['sum'] or 0
     unsold = dailyMilkObjects.filter(date=today).values_list('remaining_milk', flat=True).aggregate(sum=models.Sum('remaining_milk'))['sum'] or 0   
     prev_day = (dailyMilkObjects.all().order_by(
-        "-date").exclude(id=dailyMilkObjects.last().id).first().total_milk)    #!++++++++++++++Red flag++++++++++++++++++
-    percentage_prev_day = round(((total_milk_today - prev_day)/prev_day) * 100, 2)
+        "-date").exclude(id=dailyMilkObjects.last().id).first().total_milk) if dailyMilkObjects.exists() else 0   
+    if prev_day == 0:
+        percentage_prev_day = 0
+    else:
+        percentage_prev_day = round(((total_milk_today - prev_day)/prev_day) * 100, 2)
     pay_as_you_go_quantity = PayAsYouGoCustomer.objects.filter(
         date=today).aggregate(total_qty=models.Sum('qty'))["total_qty"]
     subscription_sold_quantity = HandleCustomer.objects.filter(
@@ -129,12 +132,13 @@ def dashboard(request):
 
 
 def customers(request):
-    customers_data_query = Customer.objects.values('name', 'phone_no', 'qty', 'rate', 'start_date', 'end_date')
+    customers_data_query = Customer.objects.values('id', 'name', 'phone_no', 'qty', 'rate', 'start_date', 'end_date')
     customers_data = [i for i in customers_data_query]
+    print(customers_data)
     context = {
         "customer":customers_data
     }
-    print(customers_data)
+    # print(customers_data)
     return render(request, 'customer.html', context)
 
 
@@ -201,8 +205,9 @@ def handlecows(request, slug):
     return HttpResponse('handle cows')
 
 
-def handleLaagAccounts(request, slug):
-    return HttpResponse('handle laag accounts page')
+def handleCustomerAccounts(request, slug):
+
+    return render(request, 'handleCustomerAccounts.html')
 
 
 def milkrecord(request, slug):
