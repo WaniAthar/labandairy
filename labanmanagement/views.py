@@ -129,7 +129,13 @@ def dashboard(request):
 
 
 def customers(request):
-    return render(request, 'customer.html')
+    customers_data_query = Customer.objects.values('name', 'phone_no', 'qty', 'rate', 'start_date', 'end_date')
+    customers_data = [i for i in customers_data_query]
+    context = {
+        "customer":customers_data
+    }
+    print(customers_data)
+    return render(request, 'customer.html', context)
 
 
 def pay_as_you_buy(request):
