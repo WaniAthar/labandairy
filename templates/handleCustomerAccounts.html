@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Name{% endblock title %}
+{% block title %}{{name}}{% endblock title %}
 {% block body %}
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -13,7 +13,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Customers list</h6>
+                            <h6 class="m-0 font-weight-bold text-success">{{name}}'s record</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -47,7 +47,8 @@
                                             <td>{{data.qty}}</td>
                                             <td>₹{{data.rate}} l</td>
                                             <td>₹{{data.amount}}</td>
-                                            <td>{{data.Balance}}</td>
+                                            <td>₹{{data.paid}}</td>
+                                            <td>₹{{data.Balance}}</td>
                                             <td>{{data.remarks}}</td>
                                         </tr>
                                         {% endfor %}

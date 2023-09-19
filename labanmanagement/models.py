@@ -62,7 +62,7 @@ class Customer(models.Model):
 
 
 class HandleCustomer(models.Model):
-    laag_account = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    account = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=True, null=True)
     qty = models.DecimalField(
         max_digits=100, decimal_places=3, blank=True, null=True)

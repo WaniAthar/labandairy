@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
@@ -63,17 +63,17 @@ def dashboard(request):
     '''
     The below code is as good as executing this SQL query 
     
-    SELECT max(id), laag_account_id, balance, date
+    SELECT max(id), account_id, balance, date
     FROM labanmanagement_handlecustomer 
-    group by laag_account_id;
+    group by account_id;
 
     '''
-    latest_ids = HandleCustomer.objects.filter(laag_account=OuterRef('laag_account')).values('laag_account').annotate(
+    latest_ids = HandleCustomer.objects.filter(account=OuterRef('account')).values('account').annotate(
     latest_id=models.Max('id')).values('latest_id')
 
     latest_records = HandleCustomer.objects.filter(id__in=Subquery(latest_ids))
 
-    balanceCustomer = latest_records.values('id', 'laag_account__id', 'balance', 'date').aggregate(balance=models.Sum('balance'))['balance'] or 0
+    balanceCustomer = latest_records.values('id', 'account__id', 'balance', 'date').aggregate(balance=models.Sum('balance'))['balance'] or 0
     balancePayAsYouGo = PayAsYouGoCustomer.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum'] or 0
     balance = balancePayAsYouGo + balanceCustomer
 
@@ -206,8 +206,25 @@ def handlecows(request, slug):
 
 
 def handleCustomerAccounts(request, slug):
-
-    return render(request, 'handleCustomerAccounts.html')
+    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date')
+    name = Customer.objects.filter(id=slug).values('name')[0]['name'].capitalize()
+    customer_data = [
+        {
+            'rate': item['rate'],
+            'qty': item['qty'],
+            'amount': item['amount'],
+            'balance': item['balance'],
+            'remarks': item['remarks'],
+            'paid': item['paid'],
+            'date':item['date']
+        }
+        for item in customer
+    ]
+    context = {
+        'name':name,
+        'customer': customer_data,
+    }
+    return render(request, 'handleCustomerAccounts.html', context)
 
 
 def milkrecord(request, slug):
