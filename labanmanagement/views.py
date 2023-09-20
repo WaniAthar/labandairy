@@ -142,8 +142,13 @@ def customers(request):
     return render(request, 'customer.html', context)
 
 
-def pay_as_you_buy(request):
-    return HttpResponse("hello this is a dummy text")
+def pay_as_you_go(request):
+    customers = PayAsYouGoCustomer.objects.values('name', 'amount', 'qty', 'rate', 'paid', 'balance', 'remarks', 'date')
+    print(customers)
+    context = {
+        'customer':customers
+    }
+    return render(request, 'payasyougo.html', context)
 
 
 def extras(request):
@@ -206,7 +211,8 @@ def handlecows(request, slug):
 
 
 def handleCustomerAccounts(request, slug):
-    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date')
+    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date')   #!++++++balance not showing+++++++
+    end_date_of_customer = Customer.objects.filter(id=slug).values('end_date')[0]['end_date'] 
     name = Customer.objects.filter(id=slug).values('name')[0]['name'].capitalize()
     customer_data = [
         {
@@ -216,13 +222,16 @@ def handleCustomerAccounts(request, slug):
             'balance': item['balance'],
             'remarks': item['remarks'],
             'paid': item['paid'],
-            'date':item['date']
+            'date':item['date'],
         }
         for item in customer
     ]
+    print(customer_data[0]['balance'])
+    
     context = {
         'name':name,
         'customer': customer_data,
+        'end_date': end_date_of_customer
     }
     return render(request, 'handleCustomerAccounts.html', context)
 
