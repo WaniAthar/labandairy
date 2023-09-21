@@ -1,11 +1,78 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Offspring {{data.tag_id}}{% endblock title %}
 {% block body %}
-<div class="container">
-    <h1>
-        Calves
-    </h1>
-    <p>
-        This is the page where the information about the calves will be shown.
-    </p>
-</div>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <div class="topbar-divider d-none d-sm-block"></div>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-success">Calves</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Tag id</th>
+                                            <th>Nickname</th>
+                                            <th>Date of birth</th>
+                                            <th>Mother id</th>
+                                            <th>Father</th>
+                                            <th>Breed</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Tag id</th>
+                                            <th>Nickname</th>
+                                            <th>Date of birth</th>
+                                            <th>Mother id</th>
+                                            <th>Father</th>
+                                            <th>Breed</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for data in calf %}
+                                        <tr>
+                                            <td>{{data.tag_id}}</td>
+                                            {% if data.nickname %}
+                                            <td>{{data.nickname}}</td>
+                                            {% else %}
+                                            <td>No nickname</td>
+                                            {% endif %}
+                                            <td>{{data.dob}}</td>
+                                            <td>{{data.mother}}</td>
+                                            {% if data.father %}
+                                            <td>{{data.father}}</td>
+                                            {% else %}
+                                            <td>No data for father</td>
+                                            {% endif %}
+                                            <td>{{data.breed}}</td>
+                                            {% if data.remarks %}
+                                            <td>{{data.remarks}}</td>
+                                            {% else %}
+                                            <td>No remarks</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+
+        </div>
+
+    </div>
 {% endblock body %}

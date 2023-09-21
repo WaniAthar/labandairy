@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Cows{% endblock title %}
+{% block title %}Offspring {{data.tag_id}}{% endblock title %}
 {% block body %}
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -13,7 +13,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Cows</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Calves</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -22,8 +22,9 @@
                                         <tr>
                                             <th>Tag id</th>
                                             <th>Nickname</th>
-                                            <th>Date of arrival</th>
-                                            <th>Offspring</th>
+                                            <th>Date of birth</th>
+                                            <th>Mother</th>
+                                            <th>Father</th>
                                             <th>Breed</th>
                                             <th>Remarks</th>
                                         </tr>
@@ -32,26 +33,28 @@
                                         <tr>
                                             <th>Tag id</th>
                                             <th>Nickname</th>
-                                            <th>Date of arrival</th>
-                                            <th>Offspring</th>
+                                            <th>Date of birth</th>
+                                            <th>Mother</th>
+                                            <th>Father</th>
                                             <th>Breed</th>
                                             <th>Remarks</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        {% for data in cows %}
+                                        {% for data in calf %}
                                         <tr>
-                                            <td><a href="cows/{{data.id}}">{{data.tag_id}}</a></td>
+                                            <td>{{data.tag_id}}</td>
                                             {% if data.nickname %}
                                             <td>{{data.nickname}}</td>
                                             {% else %}
                                             <td>No nickname</td>
                                             {% endif %}
-                                            <td>{{data.date_of_arrival}}</td>
-                                            {% if data.offspring %}
-                                            <td><a href="cows/offSpring/{{data.id}}">Click here</a></td>
+                                            <td>{{data.dob}}</td>
+                                            <td>{{data.mother}}</td>
+                                            {% if data.father %}
+                                            <td>{{data.father}}</td>
                                             {% else %}
-                                            <td>No offspring</td>
+                                            <td>No data for father</td>
                                             {% endif %}
                                             <td>{{data.breed}}</td>
                                             {% if data.remarks %}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('milkProductionDaily', views.milkProductionDaily, name='milkProductionDaily'),
     path("cows", views.cows, name="cows"),
     path("calves", views.calves, name="calves"),
+    path("cows/offSpring/<str:slug>", views.handleOffspring, name='offspring'),
     path("cows/<str:slug>", views.handlecows, name="handlecows"),
     path('cows/<str:slug>/milk', views.milkrecord, name='milk'),
     path('cows/<str:slug>/medication', views.medication, name='medication'),

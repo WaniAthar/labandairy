@@ -133,10 +133,8 @@ def dashboard(request):
 
 def customers(request):
     customers_data_query = Customer.objects.values('id', 'name', 'phone_no', 'qty', 'rate', 'start_date', 'end_date')
-    customers_data = [i for i in customers_data_query]
-    print(customers_data)
     context = {
-        "customer":customers_data
+        "customer":customers_data_query
     }
     # print(customers_data)
     return render(request, 'customer.html', context)
@@ -144,7 +142,6 @@ def customers(request):
 
 def pay_as_you_go(request):
     customers = PayAsYouGoCustomer.objects.values('name', 'amount', 'qty', 'rate', 'paid', 'balance', 'remarks', 'date')
-    print(customers)
     context = {
         'customer':customers
     }
@@ -183,11 +180,29 @@ def handlelogout(request):
 
 
 def cows(request):
-    return render(request, "cows.html")
+    allCows = Cow.objects.all().values('id','tag_id', 'nickname', 'date_of_arrival', 'offspring', 'breed', 'remarks')
+    print(allCows)
+   
+    context = {
+        'cows':allCows
+    }
+    return render(request, "cows.html", context)
 
+def handleOffspring(request, slug):
+    calves = Calf.objects.filter(mother__id=slug)
+    print(calves)
+    context = {
+        'calf':calves
+    } 
+    return render(request, "handleOffspring.html", context)
 
 def calves(request):
-    return render(request, "calves.html")
+    calves = Calf.objects.all().values('tag_id', 'nickname', 'dob', 'mother', 'father','breed', 'remarks', 'id', 'mother__id')
+    print(calves)
+    context = {
+        "calf":calves
+    }
+    return render(request, "calves.html", context)
 
 
 def milkProductionCow(request):
@@ -207,6 +222,7 @@ def expenditure(request):
 
 
 def handlecows(request, slug):
+    
     return HttpResponse('handle cows')
 
 
