@@ -222,12 +222,14 @@ def expenditure(request):
 
 
 def handlecows(request, slug):
-    
-    return HttpResponse('handle cows')
+    context = {
+        "data":"data"
+    }
+    return render(request, "handlecows.html", context)
 
 
 def handleCustomerAccounts(request, slug):
-    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date')   #!++++++balance not showing+++++++
+    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date').order_by('-date')  #!++++++out of order date (unsorted)+++++++
     end_date_of_customer = Customer.objects.filter(id=slug).values('end_date')[0]['end_date'] 
     name = Customer.objects.filter(id=slug).values('name')[0]['name'].capitalize()
     customer_data = [
@@ -242,8 +244,7 @@ def handleCustomerAccounts(request, slug):
         }
         for item in customer
     ]
-    print(customer_data[0]['balance'])
-    
+    print([i['date'] for i in customer_data])
     context = {
         'name':name,
         'customer': customer_data,
