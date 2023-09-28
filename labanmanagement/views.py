@@ -222,8 +222,18 @@ def expenditure(request):
 
 
 def handlecows(request, slug):
+    milk_record_count = MilkProduction.objects.filter(cow__id=slug).count()
+    medication_record = Medication.objects.filter(cows__id=slug).count()
+    birth_events = BirthEvent.objects.filter(mother_id=slug).count()
+    dry_periods = DryPeriod.objects.filter(cow__id=slug).count()
+    heat_periods = HeatPeriod.objects.filter(cow__id=slug).count()
+    print(heat_periods)
     context = {
-        "data":"data"
+        "milk_record_count": milk_record_count,
+        "medication_record_count": medication_record,
+        "birth_event_count":birth_events,
+        "dry_period_count":dry_periods,
+        "heat_period_count":heat_periods
     }
     return render(request, "handlecows.html", context)
 

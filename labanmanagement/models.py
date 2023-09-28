@@ -165,7 +165,7 @@ class BirthEvent(models.Model):
     remarks = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.calf_name} - {self.date}"
+        return f"{self.calf_name} {self.mother} - {self.date}"
 
 
 class DryPeriod(models.Model):
@@ -331,3 +331,14 @@ def update_revenue_record(instance):
         revenue_record.revenue = (total_revenue or 0) + \
             (total_revenue_pay_as_you_go or 0)
         revenue_record.save()
+
+# signal to update the birthevent and Cow objects whenever a calf is added to the records
+@receiver(post_save, sender=Calf)
+@receiver(post_delete, sender=Calf)
+def create_calf(sender, instance, created, **kwargs):
+    if created:
+        birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, mother=instance.mother, remarks=instance.remarks)
+        birth_event.save()
+
+        #update the Cow object to add this calf as offspring.
+        instance.mother.offspring.add(instance)
