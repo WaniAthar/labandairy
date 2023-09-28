@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Daily Milk Production{% endblock title %}
+{% block body %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <div class="topbar-divider d-none d-sm-block"></div>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-success">Daily Milk Production</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Total Milk</th>
+                                            <th>Sold Milk</th>                                           
+                                            <th>Remaining Milk</th>                                           
+                                            <!-- <th>Sold Milk</th>                                             -->
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Total Milk</th>
+                                            <th>Sold Milk</th>
+                                            <th>Remaining Milk</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody class="no-sorting">
+                                        {% for data in totalmilk%}
+                                        <tr>
+                                            <td>{{data.date}}</td>
+                                            <td>{{data.total_milk}}</td>
+                                            <td>{{data.sold_milk}}</td>
+                                            <td>{{data.remaining_milk}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+
+        </div>
+
+    </div>
+{% endblock body %}

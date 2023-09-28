@@ -210,15 +210,21 @@ def milkProductionCow(request):
 
 
 def milkProductionDaily(request):
-    return HttpResponse("{'hello':'hello'}")
+    milk_production = DailyTotalMilk.objects.order_by("-date").all()
+    context = {"totalmilk":milk_production}
+    return render(request, "milkproductiondaily.html", context)
 
 
 def revenue(request):
-    return HttpResponse("revenue")
+    revenue = Revenue.objects.all().order_by("-date")
+    context = {"revenue":revenue}
+    return render(request, "revenue.html", context)
 
 
 def expenditure(request):
-    return HttpResponse("expenditure")
+    expenditure = Expenditure.objects.all().order_by("-date")
+    context = {"expenditure":expenditure}
+    return render(request, "expenditure.html", context)
 
 
 def handlecows(request, slug):
@@ -227,8 +233,15 @@ def handlecows(request, slug):
     birth_events = BirthEvent.objects.filter(mother_id=slug).count()
     dry_periods = DryPeriod.objects.filter(cow__id=slug).count()
     heat_periods = HeatPeriod.objects.filter(cow__id=slug).count()
-    print(heat_periods)
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
     context = {
+        "slug":slug,
+        "tag": tag,
         "milk_record_count": milk_record_count,
         "medication_record_count": medication_record,
         "birth_event_count":birth_events,
@@ -267,5 +280,85 @@ def milkrecord(request, slug):
     return HttpResponse('milk record page')
 
 
-def medication(request, slug):
+def medication(request):
     return HttpResponse('this is the medication page')
+
+def medicationCow(request, slug):
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    medication_record = Medication.objects.filter(cows__id=slug).order_by('-date').values("date", 'Diagnosis', 'Medication', 'doctor', 'remarks')
+    print(medication_record)
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
+    context = {
+        "slug":slug,
+        "tag":tag,
+        "medication":medication_record
+    }
+    return render(request, "cowmedication.html", context)
+
+def milkRecordCow(request, slug):
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    milk_record = MilkProduction.objects.filter(cow_id=slug).order_by('-date').values()    #fetching all values
+    print(milk_record)
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
+    context = {
+        "slug":slug,
+        "tag":tag,
+        "milk":milk_record
+    }
+    return render(request, 'cowmilk.html', context)
+
+def birthEventCow(request, slug):
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    birthEvent = BirthEvent.objects.filter(mother_id=slug).order_by('-date').values()
+    print(birthEvent)
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
+    context = {
+        "slug":slug,
+        "tag":tag,
+        "birthevents": birthEvent
+    }
+    return render(request, 'cowBirthevent.html', context)
+
+
+def heatPeriodsCow(request, slug):
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    heat_period = HeatPeriod.objects.filter(cow_id=slug).order_by('-start_date').values()
+    print(heat_period)
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
+    context = {
+        "slug":slug,
+        "tag":tag,
+        "heat_period":heat_period
+    }
+    return render(request, 'heatperiodcow.html', context)
+
+def dryPeriodsCow(request, slug):
+    cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
+    cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
+    dry_period = DryPeriod.objects.filter(cow_id=slug).order_by('-start_date').values()
+    if cow_name:
+        tag = cow_name+f" ({cow_tag})"
+    else:
+        tag = cow_tag
+    context = {
+        "slug":slug,
+        "tag":tag,
+        "dryperiod":dry_period
+    }
+    return render(request, 'dryperiodcow.html', context)
