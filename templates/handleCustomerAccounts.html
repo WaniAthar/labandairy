@@ -54,7 +54,7 @@
                                             <td>₹{{data.rate}} l</td>
                                             <td>₹{{data.amount}}</td>
                                             <td>₹{{data.paid}}</td>
-                                            <td>₹{{data.balance}}</td>
+                                            <td class="{% if forloop.first and data.balance > 0 %}text-danger{% elif forloop.first and data.balance <= 0 %}text-success{% endif %}">₹{{ data.balance }}</td>
                                             <td>{{data.remarks}}</td>
                                         </tr>
                                         {% endfor %}
