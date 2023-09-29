@@ -10,7 +10,7 @@ from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
 from django.db.models import OuterRef, Subquery
 
-# TODO: Make pages for the navigations
+# ///TODO: Make pages for the navigations
 # ///!BUG: FIX the alignment of the cards in dashboard.html
 # ///!BUG: When customer table is updated, daily total milk record doesnt get updated
 # TODO: Test the website

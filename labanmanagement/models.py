@@ -77,15 +77,15 @@ class HandleCustomer(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.qty or self.qty == 0:
-            self.qty = self.laag_account.qty
+            self.qty = self.account.qty
         if not self.rate or self.rate == 0:
-            self.rate = self.laag_account.rate
+            self.rate = self.account.rate
         if not self.amount:
             self.amount = self.qty * Decimal(str(self.rate))
-            # Get the cumulative balance for the same laag_account
+            # Get the cumulative balance for the same account
             previous_balance = (
                 HandleCustomer.objects
-                .filter(laag_account=self.laag_account)
+                .filter(account=self.account)
                 # Exclude the current instance from the calculation
                 .exclude(pk=self.pk)
                 .aggregate(total_balance=models.Sum('amount') - models.Sum('paid'))
@@ -100,7 +100,7 @@ class HandleCustomer(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.laag_account.username} + {self.date}"
+        return f"{self.account.username} + {self.date}"
 
 
 class Cow(models.Model):

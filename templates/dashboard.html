@@ -264,8 +264,7 @@
           // JavaScript code
           document.addEventListener("DOMContentLoaded", function () {
             const data = {
-              labels: [{% for label in cow_data.tagId %}{{ label }
-          }, {% endfor %}],
+              labels: [{% for label in cow_data.tagId %}{{ label }}, {% endfor %}],
             datasets: [
             {
               label: "Today",
