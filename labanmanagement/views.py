@@ -36,7 +36,14 @@ def handle404Notfound(request, exception):
 
 @login_required(login_url='/login')
 def dashboard(request):
-    print(today)
+    one_day_before = today + timedelta(days=1)
+    pending_orders = BulkOrder.objects.filter(
+        date_of_delivery=one_day_before,
+        delivered=False,
+    )
+    for order in pending_orders:
+        reminder_message = f"Don't forget! Order for {order.name_of_client} is scheduled for delivery tomorrow."
+        messages.info(request, reminder_message)
     dailyMilkObjects = DailyTotalMilk.objects
     total_milk_today = dailyMilkObjects.filter(date=today).values_list('total_milk', flat=True).aggregate(sum=models.Sum('total_milk'))['sum'] or 0
     sold_milk_today =dailyMilkObjects.filter(date=today).values_list('sold_milk', flat=True).aggregate(sum=models.Sum('sold_milk'))['sum'] or 0
@@ -58,7 +65,8 @@ def dashboard(request):
         handlecustomer__balance__gt=0).count()
     pending_payment_payasyougo = PayAsYouGoCustomer.objects.filter(
         balance__gt=0).count()
-    pending_payments = pending_payment_customers + pending_payment_payasyougo
+    pending_bulk_order_payment = BulkOrder.objects.filter(balance__gt=0).count()
+    pending_payments = pending_payment_customers + pending_payment_payasyougo + pending_bulk_order_payment
 
     '''
     The below code is as good as executing this SQL query 
@@ -75,7 +83,8 @@ def dashboard(request):
 
     balanceCustomer = latest_records.values('id', 'account__id', 'balance', 'date').aggregate(balance=models.Sum('balance'))['balance'] or 0
     balancePayAsYouGo = PayAsYouGoCustomer.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum'] or 0
-    balance = balancePayAsYouGo + balanceCustomer
+    balanceBulkOrder = BulkOrder.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum'] or 0
+    balance = balancePayAsYouGo + balanceCustomer + balanceBulkOrder
 
     revenue= Revenue.objects.filter(date=today).values_list('revenue', flat=True).aggregate(sum=models.Sum('revenue'))['sum'] or 0
     expenditure = Expenditure.objects.filter(date=today).values('amount').aggregate(sum=models.Sum('amount'))['sum'] or 0
@@ -362,3 +371,17 @@ def dryPeriodsCow(request, slug):
         "dryperiod":dry_period
     }
     return render(request, 'dryperiodcow.html', context)
+
+def bulkorder(request):
+    one_day_before = today + timedelta(days=1)
+    pending_orders = BulkOrder.objects.filter(
+        date_of_delivery=one_day_before,
+        delivered=False,
+    )
+    for order in pending_orders:
+        reminder_message = f"Don't forget! Order for {order.name_of_client} is scheduled for delivery tomorrow."
+        messages.info(request, reminder_message)
+    orderes = BulkOrder.objects.all().values()
+
+    context = {'bulkorder':orderes}
+    return render(request, 'bulkorder.html', context)

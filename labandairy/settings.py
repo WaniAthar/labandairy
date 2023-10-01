@@ -8,6 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -86,10 +87,11 @@ USE_TZ = True
 
 
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    os.path.join(BASE_DIR, 'static')
 ]
 MESSAGE_TAGS = {
     messages.ERROR : "danger"

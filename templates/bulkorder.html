@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Bulk Order{% endblock title %}
+{% block body %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <div class="topbar-divider d-none d-sm-block"></div>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-success">Bulk Order</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Order time</th>
+                                            <th>Customer name</th>
+                                            <th>Quantity</th>                                           
+                                            <th>Occasion</th>
+                                            <th>Rate</th>
+                                            <th>Amount</th>
+                                            <th>Date of delivery</th>
+                                            <th>Payment</th>
+                                            <th>Paid</th>
+                                            <th>Balance</th>
+                                            <th>Delivered</th>
+                                            <th>Remarks</th>
+                                            <!-- <th>Remarks</th>                                             -->
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Order time</th>
+                                            <th>Customer name</th>
+                                            <th>Quantity</th>
+                                            <th>Occasion</th>
+                                            <th>Rate</th>
+                                            <th>Amount</th>
+                                            <th>Date of delivery</th>
+                                            <th>Payment</th>
+                                            <th>Paid</th>
+                                            <th>Balance</th>
+                                            <th>Delivered</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody class="no-sorting">
+                                        {% for data in bulkorder%}
+                                        <tr>
+                                            <td>{{data.date}}</td>
+                                            <td>{{data.order_time}}</td>
+                                            <td>{{data.name_of_client}}</td>
+                                            <td>{{data.quantity}}</td>
+                                            <td>{{data.occasion}}</td>
+                                            <td>{{data.rate}}</td>
+                                            <td><b>{{data.amount}}</b></td>
+                                            <td>{{data.date_of_delivery}}</td>
+                                            <td>{{data.payment}}</td>
+                                            <td class="{% if data.paid > 0%}text-success{% endif %}"><b>{{data.paid}}</b?</td>
+                                            <td class="{% if data.balance > 0 %}text-danger{% endif %}"><b>{{data.balance}}</b></td>
+                                            <td>{% if data.delivered == True %}Delivered {% else %}Not Delivered{% endif %}</td>
+                                            <td>{{data.remarks}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+
+        </div>
+
+    </div>
+{% endblock body %}

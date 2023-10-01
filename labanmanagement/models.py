@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db import models
 from django.forms import ValidationError
 from django.utils.text import slugify
+import datetime
 
 
 # list of breeds
@@ -44,6 +45,11 @@ dairy_cow_breeds = [
     ("Simbrah", "Simbrah"),
 ]
 
+payment_type = [
+    ("Advanced","Advanced"),
+    ("After delivery", "After delivery"),
+    ("Not paid", "Not paid")
+]
 
 class Customer(models.Model):
     name = models.CharField(max_length=255)
@@ -53,21 +59,20 @@ class Customer(models.Model):
     @property
     def username(self):
         return f"{self.name}{self.phone_no}"
-    qty = models.IntegerField()
-    rate = models.IntegerField()
+    qty = models.DecimalField(max_digits=10, decimal_places=3)
+    rate = models.DecimalField(max_digits=10, decimal_places=3)
     start_date = models.DateField(null=True, blank=True)  # Optional start date
     end_date = models.DateField(null=True, blank=True)    # Optional end date
     def __str__(self):
-        return f"{self.name}'s Laag Account"
+        return f"{self.name}'s Account"
 
 
 class HandleCustomer(models.Model):
     account = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    amount = models.IntegerField(blank=True, null=True)
-    qty = models.DecimalField(
-        max_digits=100, decimal_places=3, blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    qty = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True)
     rate = models.DecimalField(
-        max_digits=100, decimal_places=3, blank=True, null=True)
+        max_digits=100, decimal_places=3, blank=True, null=True, default=60)
     paid = models.DecimalField(
         max_digits=100, decimal_places=3, default=0, blank=True, null=True)
     balance = models.DecimalField(
@@ -227,10 +232,12 @@ class DailyTotalMilk(models.Model):
 
         sold_milk_handle_customer = HandleCustomer.objects.filter(
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
+        
+        sold_milk_bulk_order = BulkOrder.objects.filter(date=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
 
         print(sold_milk_handle_customer)
         print(sold_milk_pay_as_you_go)
-        total_sold = sold_milk_pay_as_you_go + sold_milk_handle_customer
+        total_sold = sold_milk_pay_as_you_go + sold_milk_handle_customer + sold_milk_bulk_order
         print(total_sold)
 
         # Create or get the DailyTotalMilk instance for the date
@@ -248,11 +255,11 @@ class DailyTotalMilk(models.Model):
 
 class PayAsYouGoCustomer(models.Model):
     name = models.CharField(max_length=255)
-    amount = models.IntegerField(blank=True, null=True)
+    amount = models.DecimalField(blank=True, null=True, decimal_places=3, max_digits=100)
     qty = models.DecimalField(
-        max_digits=100, decimal_places=3, blank=True, null=True)
+        max_digits=100, decimal_places=3)
     rate = models.DecimalField(
-        max_digits=100, decimal_places=3, blank=True, null=True)
+        max_digits=100, decimal_places=3)
     paid = models.DecimalField(
         max_digits=100, decimal_places=3, default=0, blank=True, null=True)
     balance = models.DecimalField(
@@ -291,6 +298,38 @@ class Expenditure(models.Model):
 
     def __str__(self) -> str:
         return f"{self.date} {self.particulars} {self.amount}"
+    
+class BulkOrder(models.Model):
+    date = models.DateField()
+    order_time = models.TimeField()
+    name_of_client = models.CharField(max_length=100)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2)
+    occasion = models.CharField(max_length=100)
+    rate = models.DecimalField(default=60, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=100, decimal_places=3, blank=True, null=True, default=0)
+    date_of_delivery = models.DateField()
+    payment = models.CharField(choices=payment_type, max_length=30)
+    paid = models.DecimalField(default=0, max_digits=10, decimal_places=2, blank=True, null=True)
+    balance = models.DecimalField(max_digits=100, decimal_places=3, default=0, blank=True, null=True)
+    delivered = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
+    remarks = models.TextField(max_length=300)
+
+    def save(self, *args, **kwargs):
+        self.amount = self.rate * self.quantity if self.rate and self.quantity else None
+        if self.payment in ["Advanced", "After delivery"] and self.amount is not None:
+            self.balance = self.amount - self.paid
+            if self.balance == Decimal('0'):
+                self.is_paid = True
+        else:
+            self.is_paid = False
+            self.paid = Decimal('0')
+            self.balance = self.amount - self.paid
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name_of_client}"
+
 
 #?###########################################################################
 #?###########################################################################
@@ -300,13 +339,23 @@ class Expenditure(models.Model):
 #?###########################################################################
 @receiver(post_save, sender=MilkProduction)
 @receiver(post_delete, sender=MilkProduction)
-@receiver(post_save, sender=HandleCustomer)
 @receiver(post_save, sender=PayAsYouGoCustomer)
+@receiver(post_save, sender=HandleCustomer)
 @receiver(post_delete, sender=HandleCustomer)
 @receiver(post_delete, sender=PayAsYouGoCustomer)
 def update_daily_total_milk(sender, instance, **kwargs):
     date = instance.date
     DailyTotalMilk.update_daily_total(date)
+
+
+@receiver(post_delete, sender=BulkOrder)
+@receiver(post_save, sender=BulkOrder)
+def update_bulk_milk(sender, instance, **kwargs):
+        if instance.date_of_delivery == datetime.date.today() and instance.delivered:
+            date = instance.date_of_delivery
+            DailyTotalMilk.update_daily_total(date)
+    
+
 
 @receiver(post_save, sender=HandleCustomer)
 @receiver(post_delete, sender=HandleCustomer)
@@ -319,6 +368,10 @@ def handle_customer_payment(sender, instance, **kwargs):
 def pay_as_you_go_customer_payment(sender, instance, **kwargs):
     update_revenue_record(instance)
 
+@receiver(post_save, sender=BulkOrder)
+@receiver(post_delete, sender=BulkOrder)
+def bulk_order_payment(sender, instance,**kwargs):
+    update_revenue_record(instance)
 
 def update_revenue_record(instance):
     if hasattr(instance, 'date'):
@@ -327,9 +380,11 @@ def update_revenue_record(instance):
             total_revenue=models.Sum('paid'))['total_revenue']
         total_revenue_pay_as_you_go = PayAsYouGoCustomer.objects.filter(
             date=instance.date).aggregate(total_revenue=models.Sum('paid'))['total_revenue']
+        
+        total_revenue_bulk = BulkOrder.objects.filter(date=instance.date).aggregate(total_revenue=models.Sum('paid'))['total_revenue']
 
         revenue_record.revenue = (total_revenue or 0) + \
-            (total_revenue_pay_as_you_go or 0)
+            (total_revenue_pay_as_you_go or 0) + (total_revenue_bulk or 0)
         revenue_record.save()
 
 # signal to update the birthevent and Cow objects whenever a calf is added to the records

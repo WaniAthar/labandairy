@@ -27,7 +27,22 @@ class HandleCustomerAdmin(admin.ModelAdmin):
         form.base_fields['date'].widget.attrs['placeholder'] = 'Enter date'
         return form
 
-
+class BulkOrderAdmin(admin.ModelAdmin):
+    list_display = ['date', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date_of_delivery', 'payment', 'paid', 'balance', 'is_paid', 'remarks']
+    search_fields = ['date', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date_of_delivery', 'payment', 'paid', 'balance', 'is_paid', 'remarks']
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        # Add placeholders for the fields in the form
+        form.base_fields['amount'].widget.attrs['placeholder'] = 'Enter custom amount or leave empty to calculate amount automatically'
+        form.base_fields['quantity'].widget.attrs['placeholder'] = 'Enter quantity of the order in litres'
+        form.base_fields['paid'].widget.attrs['placeholder'] = 'Enter paid amount'
+        form.base_fields['rate'].widget.attrs['placeholder'] = 'Enter the rate of the milk (default = 60)'
+        form.base_fields['balance'].widget.attrs['placeholder'] = 'Enter custom balance or leave empty to calculate the balance automatically'
+        form.base_fields['remarks'].widget.attrs['placeholder'] = 'Enter remarks'
+        form.base_fields['date'].widget.attrs['placeholder'] = 'Enter date'
+        return form
+    
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['name', 'phone_no', 'qty',
                     'rate', 'start_date', 'end_date']
@@ -89,3 +104,4 @@ admin.site.register(Calf, CalfAdmin)
 admin.site.register(DailyTotalMilk, DailyTotalMilkAdmin)
 admin.site.register(Revenue, RevenueAdmin)
 admin.site.register(Expenditure,ExpenditureAdmin)
+admin.site.register(BulkOrder,BulkOrderAdmin)

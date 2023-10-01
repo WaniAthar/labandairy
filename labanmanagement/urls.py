@@ -20,4 +20,5 @@ urlpatterns = [
     path('cows/<str:slug>/heatperiods', views.heatPeriodsCow, name='heatPeriodsCow'),
     path('revenue', views.revenue, name="revenue"),
     path('expenditure', views.expenditure, name="expenditure"),
+    path('bulkorder', views.bulkorder, name='bulkorder')
 ]
