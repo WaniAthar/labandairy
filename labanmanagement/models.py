@@ -12,6 +12,7 @@ import datetime
 # list of breeds
 dairy_cow_breeds = [
     ("HF", "Holstein Friesian (HF)"),
+    ("HF Jersey (cross)", "HF Jersey (cross)"),
     ("Jersey", "Jersey"),
     ("Guernsey", "Guernsey"),
     ("Ayrshire", "Ayrshire"),
@@ -233,7 +234,8 @@ class DailyTotalMilk(models.Model):
         sold_milk_handle_customer = HandleCustomer.objects.filter(
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
         
-        sold_milk_bulk_order = BulkOrder.objects.filter(date=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
+        sold_milk_bulk_order = BulkOrder.objects.filter(
+            date=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
 
         print(sold_milk_handle_customer)
         print(sold_milk_pay_as_you_go)
