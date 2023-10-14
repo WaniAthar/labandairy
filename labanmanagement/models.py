@@ -165,7 +165,7 @@ def validate_dam(value):
 
 class BirthEvent(models.Model):
     date = models.DateField()
-    calf_name = models.CharField(max_length=100, null=True, blank=True)
+    calf_name = models.CharField(max_length=100, blank=True)
     dam = models.ForeignKey(
         Cow, on_delete=models.CASCADE, related_name='calves')
     remarks = models.TextField(null=True, blank=True)
@@ -198,7 +198,7 @@ class HeatPeriod(models.Model):
 
 class Calf(models.Model):
     tag_id = models.CharField(max_length=255)
-    nickname = models.CharField(max_length=255)
+    nickname = models.CharField(blank=True, null=True, max_length=255)
     gender = models.CharField(max_length=10, choices=[("M", "Male"),("F","Female")])
     dob = models.DateField()
     dam = models.ForeignKey(Cow, on_delete=models.CASCADE,
@@ -395,7 +395,7 @@ def update_revenue_record(instance):
 def create_calf(sender, instance, created, **kwargs):
     if created:
         try:
-            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, dam=instance.dam, remarks=instance.remarks)
+            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname or "", dam=instance.dam, remarks=instance.remarks)
             birth_event.save()
         except birth_event.DoesNotExist:
             pass
