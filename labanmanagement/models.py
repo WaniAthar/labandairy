@@ -402,6 +402,7 @@ def create_calf(sender, instance, created, **kwargs):
 
         instance.dam.offspring.add(instance)
     
+# signal to delete calf from the dam relation 
 @receiver(post_delete, sender=Calf)
 def delete_calf(sender, instance, **kwargs):
     if instance.dam:
