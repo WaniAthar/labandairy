@@ -198,7 +198,7 @@ def cows(request):
     return render(request, "cows.html", context)
 
 def handleOffspring(request, slug):
-    calves = Calf.objects.filter(mother__id=slug)
+    calves = Calf.objects.filter(dam__id=slug)
     print(calves)
     context = {
         'calf':calves
@@ -206,7 +206,7 @@ def handleOffspring(request, slug):
     return render(request, "handleOffspring.html", context)
 
 def calves(request):
-    calves = Calf.objects.all().values('tag_id', 'nickname', 'dob', 'mother', 'father','breed', 'remarks', 'id', 'mother__id')
+    calves = Calf.objects.all().values('tag_id', 'nickname', 'dob', 'dam', 'father','breed', 'remarks', 'id', 'dam__id')
     print(calves)
     context = {
         "calf":calves
@@ -239,7 +239,7 @@ def expenditure(request):
 def handlecows(request, slug):
     milk_record_count = MilkProduction.objects.filter(cow__id=slug).count()
     medication_record = Medication.objects.filter(cows__id=slug).count()
-    birth_events = BirthEvent.objects.filter(mother_id=slug).count()
+    birth_events = BirthEvent.objects.filter(dam_id=slug).count()
     dry_periods = DryPeriod.objects.filter(cow__id=slug).count()
     heat_periods = HeatPeriod.objects.filter(cow__id=slug).count()
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
@@ -327,7 +327,7 @@ def milkRecordCow(request, slug):
 def birthEventCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
-    birthEvent = BirthEvent.objects.filter(mother_id=slug).order_by('-date').values()
+    birthEvent = BirthEvent.objects.filter(dam_id=slug).order_by('-date').values()
     print(birthEvent)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"

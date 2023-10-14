@@ -153,7 +153,7 @@ class Medication(models.Model):
     remarks = models.TextField(null=True, blank=True)
 
 
-def validate_mother(value):
+def validate_dam(value):
     try:
         cow = Cow.objects.get(tag_id=value)
         return cow
@@ -166,12 +166,12 @@ def validate_mother(value):
 class BirthEvent(models.Model):
     date = models.DateField()
     calf_name = models.CharField(max_length=100)
-    mother = models.ForeignKey(
+    dam = models.ForeignKey(
         Cow, on_delete=models.CASCADE, related_name='calves')
     remarks = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.calf_name} {self.mother} - {self.date}"
+        return f"{self.calf_name} {self.dam} - {self.date}"
 
 
 class DryPeriod(models.Model):
@@ -199,9 +199,10 @@ class HeatPeriod(models.Model):
 class Calf(models.Model):
     tag_id = models.CharField(max_length=255)
     nickname = models.CharField(blank=True, null=True, max_length=255)
+    gender = models.CharField(max_length=10, choices=[("M", "Male"),("F","Female")])
     dob = models.DateField()
-    mother = models.ForeignKey(Cow, on_delete=models.CASCADE,
-                               related_name='calves_as_mother', null=True, blank=True)
+    dam = models.ForeignKey(Cow, on_delete=models.CASCADE,
+                               related_name='calves_as_dam', null=True, blank=True)
     father = models.CharField(max_length=255, blank=True)
     breed = models.CharField(max_length=100, choices=dairy_cow_breeds)
     remarks = models.TextField(null=True, blank=True)
@@ -394,14 +395,14 @@ def update_revenue_record(instance):
 def create_calf(sender, instance, created, **kwargs):
     if created:
         try:
-            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, mother=instance.mother, remarks=instance.remarks)
+            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, dam=instance.dam, remarks=instance.remarks)
             birth_event.save()
         except birth_event.DoesNotExist:
             pass
 
-        instance.mother.offspring.add(instance)
+        instance.dam.offspring.add(instance)
     
 @receiver(post_delete, sender=Calf)
 def delete_calf(sender, instance, **kwargs):
-    if instance.mother:
-        instance.mother.offspring.remove(instance)
+    if instance.dam:
+        instance.dam.offspring.remove(instance)

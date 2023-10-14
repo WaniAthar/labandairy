@@ -58,10 +58,10 @@ class CowAdmin(admin.ModelAdmin):
 
 
 class CalfAdmin(admin.ModelAdmin):
-    list_display = ['tag_id', 'nickname', 'dob',
-                    'breed', 'mother', 'father', 'remarks']
-    search_fields = ['tag_id', 'nickname', 'dob',
-                     'breed', 'mother', 'father', 'remarks']
+    list_display = ['tag_id', 'nickname', 'dob','gender',
+                    'breed', 'dam', 'father', 'remarks', ]
+    search_fields = ['tag_id', 'nickname', 'dob','gender',
+                     'breed', 'dam', 'father', 'remarks']
 
 
 class MedicationAdmin(admin.ModelAdmin):
