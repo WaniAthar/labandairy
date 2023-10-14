@@ -198,7 +198,7 @@ class HeatPeriod(models.Model):
 
 class Calf(models.Model):
     tag_id = models.CharField(max_length=255)
-    nickname = models.CharField(blank=True, null=True, max_length=255)
+    nickname = models.CharField(max_length=255)
     gender = models.CharField(max_length=10, choices=[("M", "Male"),("F","Female")])
     dob = models.DateField()
     dam = models.ForeignKey(Cow, on_delete=models.CASCADE,
