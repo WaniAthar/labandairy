@@ -391,11 +391,17 @@ def update_revenue_record(instance):
 
 # signal to update the birthevent and Cow objects whenever a calf is added to the records
 @receiver(post_save, sender=Calf)
-@receiver(post_delete, sender=Calf)
 def create_calf(sender, instance, created, **kwargs):
     if created:
-        birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, mother=instance.mother, remarks=instance.remarks)
-        birth_event.save()
+        try:
+            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname, mother=instance.mother, remarks=instance.remarks)
+            birth_event.save()
+        except birth_event.DoesNotExist:
+            pass
 
-        #update the Cow object to add this calf as offspring.
         instance.mother.offspring.add(instance)
+    
+@receiver(post_delete, sender=Calf)
+def delete_calf(sender, instance, **kwargs):
+    if instance.mother:
+        instance.mother.offspring.remove(instance)
