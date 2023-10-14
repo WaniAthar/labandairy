@@ -165,7 +165,7 @@ def validate_dam(value):
 
 class BirthEvent(models.Model):
     date = models.DateField()
-    calf_name = models.CharField(max_length=100)
+    calf_name = models.CharField(max_length=100, null=True, blank=True)
     dam = models.ForeignKey(
         Cow, on_delete=models.CASCADE, related_name='calves')
     remarks = models.TextField(null=True, blank=True)
