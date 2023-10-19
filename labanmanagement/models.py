@@ -310,19 +310,20 @@ class Expenditure(models.Model):
         return f"{self.date} {self.particulars} {self.amount}"
     
 class BulkOrder(models.Model):
-    date = models.DateField()
+    date_of_delivery = models.DateField()
     order_time = models.TimeField()
     name_of_client = models.CharField(max_length=100)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     occasion = models.CharField(max_length=100)
     rate = models.DecimalField(default=60, max_digits=10, decimal_places=2)
     amount = models.DecimalField(max_digits=100, decimal_places=3, blank=True, null=True, default=0)
-    date_of_delivery = models.DateField()
     payment = models.CharField(choices=payment_type, max_length=30)
     paid = models.DecimalField(default=0, max_digits=10, decimal_places=2, blank=True, null=True)
     balance = models.DecimalField(max_digits=100, decimal_places=3, default=0, blank=True, null=True)
     delivered = models.BooleanField(default=False)
+    delivery_time = models.CharField(choices=[("Morning", "M"), ("Evening", "E")], max_length=30, null=True, blank=True)
     is_paid = models.BooleanField(default=False)
+    date = models.DateField()
     remarks = models.TextField(max_length=300)
 
     def save(self, *args, **kwargs):
