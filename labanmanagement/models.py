@@ -79,7 +79,7 @@ class HandleCustomer(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     qty = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True)
     rate = models.DecimalField(
-        max_digits=100, decimal_places=3, blank=True, null=True, default=60)
+        max_digits=100, decimal_places=3, blank=True, null=True)
     paid = models.DecimalField(
         max_digits=100, decimal_places=3, default=0, blank=True, null=True)
     balance = models.DecimalField(
