@@ -264,21 +264,35 @@
           // JavaScript code
           document.addEventListener("DOMContentLoaded", function () {
             const data = {
-              labels: [{% for label in cow_data.tagId %}{{ label }}, {% endfor %}],
+              labels: [
+              {% for label in cow_data.tagId %}
+                {% if label.tag_id != "100UNKNOWN" %}
+                  "{{ label.tag_id }}"{% if not forloop.last %}, {% endif %}
+                {% endif %}
+              {% endfor %}
+            ],
             datasets: [
             {
               label: "Today",
               backgroundColor: "rgba(75, 192, 192, 0.6)",
               borderColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
-              data: [{% for data in cow_data.todayMilkPerCow %}{{ data }}, {% endfor %}],
+              data: [
+              {% for data in cow_data.todayMilkPerCow %}
+                {{ data.total_milk|default:"0" }}{% if not forloop.last %},{% endif %}
+              {% endfor %},0
+            ],
+            
                 },
             {
               label: "Yesterday",
               backgroundColor: "rgba(255, 99, 132, 0.6)",
               borderColor: "rgba(255, 99, 132, 1)",
               borderWidth: 1,
-              data: [{% for data in cow_data.yesterdayMilkPerCow %}{{ data }}, {% endfor %}],
+              data: [{% for data in cow_data.yesterdayMilkPerCow %}
+              {{ data.total_milk|default:"0" }}{% if not forloop.last %}, {% endif %}
+            {% endfor %},0
+            ],
                 },
               ],
             };
@@ -325,7 +339,7 @@
         <script>
           // JavaScript code
           document.addEventListener("DOMContentLoaded", function () {
-            const data = [{{ subcription }}, {{ payasyougoqty }}, {{ unsold }}];
+            const data = [{% if subscription %}{{ subcription }}{% else %}0{% endif %}, {% if payasyougoqty %}{{ payasyougoqty }}{% else %}0{% endif %}, {% if unsold %}{{ unsold }}{% else %}0{% endif %}];
           const labels = ["Customer", "Pay-as-you-go", "Not sold"];
 
           // Doughnut chart configuration

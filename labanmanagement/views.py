@@ -92,32 +92,8 @@ def dashboard(request):
     cowTagsQuerySet = Cow.objects.order_by('tag_id').values('tag_id')
     milkPerCowTodayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=today).values('cow__tag_id','total_milk')
     milkPerCowYesterdayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=yesterday).values('cow__tag_id','total_milk')
-    cowTagId = [i['tag_id'] for i in cowTagsQuerySet]
-    todayMilkPerCow = [i['total_milk'] for i in milkPerCowTodayQuerySet]
-    yesterdayMilkPerCow = [i['total_milk'] for i in milkPerCowYesterdayQuerySet]  
+   
     
-    today_milk_dict = {tag_id: milk for tag_id, milk in zip(cowTagId, todayMilkPerCow)}
-    yesterday_milk_dict = {tag_id: milk for tag_id, milk in zip(cowTagId, yesterdayMilkPerCow)}
-
-    all_cow_tags = set(cow['tag_id'] for cow in cowTagsQuerySet)
-
-    # Initialize empty lists to store milk data
-    todayMilkPerCow = []
-    yesterdayMilkPerCow = []
-
-    # Create dictionaries to store milk data for quick lookup
-    today_data_dict = {data['cow__tag_id']: data['total_milk'] for data in milkPerCowTodayQuerySet}
-    yesterday_data_dict = {data['cow__tag_id']: data['total_milk'] for data in milkPerCowYesterdayQuerySet}
-
-    # Iterate through all cow tags
-    for tag_id in all_cow_tags:
-        # Get milk data for today and yesterday (or set to 0 if missing)
-        today_milk = today_data_dict.get(tag_id, 0)
-        yesterday_milk = yesterday_data_dict.get(tag_id, 0)
-        
-        todayMilkPerCow.append(today_milk)
-        yesterdayMilkPerCow.append(yesterday_milk)
-
     context = {
     "total": total_milk_today,
     "sold": sold_milk_today,
@@ -132,9 +108,9 @@ def dashboard(request):
     "revenue":revenue,
     "expenditure":expenditure,
     "cow_data":{
-        "tagId":cowTagId,
-        "todayMilkPerCow":todayMilkPerCow,
-        "yesterdayMilkPerCow":yesterdayMilkPerCow
+        "tagId":cowTagsQuerySet,
+        "todayMilkPerCow":milkPerCowTodayQuerySet,
+        "yesterdayMilkPerCow":milkPerCowYesterdayQuerySet
     }
     }
     return render(request, 'dashboard.html', context)

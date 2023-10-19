@@ -9,6 +9,12 @@ from django.utils.text import slugify
 import datetime
 
 
+# TODO:
+# !Add revenue details
+# !Multiple Medications 
+# !Calf Medication and events
+
+
 # list of breeds
 dairy_cow_breeds = [
     ("HF", "Holstein Friesian (HF)"),
@@ -287,6 +293,7 @@ class PayAsYouGoCustomer(models.Model):
 class Revenue(models.Model):
     date = models.DateField()
     revenue = models.DecimalField(max_digits=100, decimal_places=3, default=0)
+    
 
     def __str__(self) -> str:
         return f"{self.date} {self.revenue}"
