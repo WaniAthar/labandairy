@@ -76,7 +76,7 @@ class Customer(models.Model):
 
 class HandleCustomer(models.Model):
     account = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     qty = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True)
     rate = models.DecimalField(
         max_digits=100, decimal_places=3, blank=True, null=True, default=60)
