@@ -244,10 +244,11 @@ class DailyTotalMilk(models.Model):
         sold_milk_bulk_order = BulkOrder.objects.filter(
             date=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
 
-        print(sold_milk_handle_customer)
-        print(sold_milk_pay_as_you_go)
+        print("sold milk handle customer: ", sold_milk_handle_customer)
+        print("sold milk pay as you go: ",sold_milk_pay_as_you_go)
+        print("sold milk bulk: ", sold_milk_bulk_order)
         total_sold = sold_milk_pay_as_you_go + sold_milk_handle_customer + sold_milk_bulk_order
-        print(total_sold)
+        print("Total sold: ",total_sold)
 
         # Create or get the DailyTotalMilk instance for the date
         daily_total, created = cls.objects.get_or_create(date=date)

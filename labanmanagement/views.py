@@ -1,13 +1,10 @@
-from itertools import zip_longest
-from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
+from django.urls import reverse
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from labanmanagement.models import *
 from datetime import date, timedelta
-from django.db.models import F, Sum
-from django.db.models.functions import Coalesce
 from django.db.models import OuterRef, Subquery
 
 # ///TODO: Make pages for the navigations
@@ -41,8 +38,9 @@ def dashboard(request):
         date_of_delivery=one_day_before,
         delivered=False,
     )
-    for order in pending_orders:
-        reminder_message = f"Don't forget! Order for {order.name_of_client} is scheduled for delivery tomorrow."
+    for order in pending_orders:        
+        reminder_message = f"Don't forget! Order for <a href='{reverse('bulkorder')}'>{order.name_of_client}</a> is scheduled for delivery tomorrow."
+
         messages.info(request, reminder_message)
     dailyMilkObjects = DailyTotalMilk.objects
     total_milk_today = dailyMilkObjects.filter(date=today).values_list('total_milk', flat=True).aggregate(sum=models.Sum('total_milk'))['sum'] or 0
@@ -357,8 +355,11 @@ def bulkorder(request):
         delivered=False,
     )
     for order in pending_orders:
-        reminder_message = f"Don't forget! Order for <a href = \"../bulkorder\">{order.name_of_client} </a> is scheduled for delivery tomorrow."
+
+        reminder_message = f"Don't forget! Order for <a href='{reverse('bulkorder')}'>{order.name_of_client}</a> is scheduled for delivery tomorrow."
+        print(reminder_message)
         messages.info(request, reminder_message)
+
     orderes = BulkOrder.objects.all().values()
 
     context = {'bulkorder':orderes}
