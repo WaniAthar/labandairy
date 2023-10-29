@@ -339,7 +339,7 @@
         <script>
           // JavaScript code
           document.addEventListener("DOMContentLoaded", function () {
-            const data = [{% if subscription %}{{ subcription }}{% else %}0{% endif %}, {% if payasyougoqty %}{{ payasyougoqty }}{% else %}0{% endif %}, {% if unsold %}{{ unsold }}{% else %}0{% endif %}];
+            const data = [{{ subcription|default:"0"}},{{ payasyougoqty|default:"0"}}, {{unsold|default:"0"}}];
           const labels = ["Customer", "Pay-as-you-go", "Not sold"];
 
           // Doughnut chart configuration

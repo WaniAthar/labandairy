@@ -67,7 +67,10 @@ def dashboard(request):
         balance__gt=0).count()
     pending_bulk_order_payment = BulkOrder.objects.filter(balance__gt=0).count()
     pending_payments = pending_payment_customers + pending_payment_payasyougo + pending_bulk_order_payment
-
+    
+    print(pending_payment_customers)
+    print(pending_bulk_order_payment)
+    print(pending_payment_payasyougo)
     '''
     The below code is as good as executing this SQL query 
     
@@ -252,7 +255,6 @@ def handleCustomerAccounts(request, slug):
         }
         for item in customer
     ]
-    print([i['date'] for i in customer_data])
     context = {
         'name':name,
         'customer': customer_data,
@@ -355,7 +357,7 @@ def bulkorder(request):
         delivered=False,
     )
     for order in pending_orders:
-        reminder_message = f"Don't forget! Order for {order.name_of_client} is scheduled for delivery tomorrow."
+        reminder_message = f"Don't forget! Order for <a href = \"../bulkorder\">{order.name_of_client} </a> is scheduled for delivery tomorrow."
         messages.info(request, reminder_message)
     orderes = BulkOrder.objects.all().values()
 
