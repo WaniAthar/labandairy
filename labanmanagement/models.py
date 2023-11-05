@@ -226,7 +226,7 @@ class DailyTotalMilk(models.Model):
         max_digits=10, decimal_places=3, default=0)
 
     @classmethod
-    def update_daily_total(cls, date):
+    def update_daily_total(cls, date, id):
         '''Signal to update daily total milk after each MilkProduction save or delete'''
         
         # Calculate and update the total milk for the given date
@@ -242,12 +242,12 @@ class DailyTotalMilk(models.Model):
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
         
         # Check for BulkOrder records with delivered unchecked for the given date
-        bulk_order_delivered = BulkOrder.objects.filter(date_of_delivery=date).values()
+        bulk_order_delivered = BulkOrder.objects.filter(date_of_delivery=date, id=id).values()
         print(bulk_order_delivered)
         if bulk_order_delivered[0]['delivered']:
                 # Calculate the total sold milk when there are no records with delivered=False
             sold_milk_bulk_order = BulkOrder.objects.filter(
-                date_of_delivery=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
+                date_of_delivery=date, id=id).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
         else:
             sold_milk_bulk_order = 0
 
@@ -372,8 +372,9 @@ def update_daily_total_milk(sender, instance, **kwargs):
 @receiver(post_save, sender=BulkOrder)
 def update_bulk_milk(sender, instance, **kwargs):
     date = instance.date_of_delivery
+    id = instance.id
     print(date)
-    DailyTotalMilk.update_daily_total(date)
+    DailyTotalMilk.update_daily_total(date, id)
 
 
 @receiver(post_save, sender=HandleCustomer)
