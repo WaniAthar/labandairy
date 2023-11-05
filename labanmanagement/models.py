@@ -274,6 +274,7 @@ class PayAsYouGoCustomer(models.Model):
         max_digits=100, decimal_places=3, default=0, blank=True, null=True)
     balance = models.DecimalField(
         max_digits=100, decimal_places=3, blank=True, null=True)
+    payment_date = models.DateField(default=None, blank=True, null= True)
     remarks = models.TextField(blank=True)
     date = models.DateField()
 
