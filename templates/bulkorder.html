@@ -38,6 +38,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th>Date of delivery</th>
                                             <th>Date</th>
                                             <th>Order time</th>
                                             <th>Customer name</th>
@@ -45,7 +46,6 @@
                                             <th>Occasion</th>
                                             <th>Rate</th>
                                             <th>Amount</th>
-                                            <th>Date of delivery</th>
                                             <th>Payment</th>
                                             <th>Paid</th>
                                             <th>Balance</th>
@@ -56,6 +56,7 @@
                                     <tbody class="no-sorting">
                                         {% for data in bulkorder%}
                                         <tr>
+                                            <td>{{data.date_of_delivery}}</td>
                                             <td>{{data.date}}</td>
                                             <td>{{data.order_time}}</td>
                                             <td>{{data.name_of_client}}</td>
@@ -63,7 +64,6 @@
                                             <td>{{data.occasion}}</td>
                                             <td>{{data.rate}}</td>
                                             <td><b>{{data.amount}}</b></td>
-                                            <td>{{data.date_of_delivery}}</td>
                                             <td>{{data.payment}}</td>
                                             <td class="{% if data.paid > 0%}text-success{% endif %}"><b>{{data.paid}}</b?</td>
                                             <td class="{% if data.balance > 0 %}text-danger{% endif %}"><b>{{data.balance}}</b></td>

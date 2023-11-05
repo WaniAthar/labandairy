@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from django.db import models
 from decimal import Decimal
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.dispatch import receiver
 from django.db import models
 from django.forms import ValidationError
@@ -241,8 +241,15 @@ class DailyTotalMilk(models.Model):
         sold_milk_handle_customer = HandleCustomer.objects.filter(
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
         
-        sold_milk_bulk_order = BulkOrder.objects.filter(
-            date=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
+        # Check for BulkOrder records with delivered unchecked for the given date
+        bulk_order_delivered = BulkOrder.objects.filter(date_of_delivery=date).values()
+        print(bulk_order_delivered)
+        if bulk_order_delivered[0]['delivered']:
+                # Calculate the total sold milk when there are no records with delivered=False
+            sold_milk_bulk_order = BulkOrder.objects.filter(
+                date_of_delivery=date).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
+        else:
+            sold_milk_bulk_order = 0
 
         print("sold milk handle customer: ", sold_milk_handle_customer)
         print("sold milk pay as you go: ",sold_milk_pay_as_you_go)
@@ -364,10 +371,9 @@ def update_daily_total_milk(sender, instance, **kwargs):
 @receiver(post_delete, sender=BulkOrder)
 @receiver(post_save, sender=BulkOrder)
 def update_bulk_milk(sender, instance, **kwargs):
-        if instance.delivered == True:
-            date = instance.date_of_delivery
-            DailyTotalMilk.update_daily_total(date)
-    
+    date = instance.date_of_delivery
+    print(date)
+    DailyTotalMilk.update_daily_total(date)
 
 
 @receiver(post_save, sender=HandleCustomer)
