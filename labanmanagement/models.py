@@ -364,7 +364,7 @@ def update_daily_total_milk(sender, instance, **kwargs):
 @receiver(post_delete, sender=BulkOrder)
 @receiver(post_save, sender=BulkOrder)
 def update_bulk_milk(sender, instance, **kwargs):
-        if instance.date_of_delivery == datetime.date.today() and instance.delivered:
+        if instance.delivered == True:
             date = instance.date_of_delivery
             DailyTotalMilk.update_daily_total(date)
     

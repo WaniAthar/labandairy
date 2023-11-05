@@ -127,7 +127,7 @@ def customers(request):
 
 
 def pay_as_you_go(request):
-    customers = PayAsYouGoCustomer.objects.values('name', 'amount', 'qty', 'rate', 'paid', 'balance', 'remarks', 'date')
+    customers = PayAsYouGoCustomer.objects.values()
     context = {
         'customer':customers
     }

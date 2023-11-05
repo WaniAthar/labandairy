@@ -28,8 +28,8 @@ class HandleCustomerAdmin(admin.ModelAdmin):
         return form
 
 class BulkOrderAdmin(admin.ModelAdmin):
-    list_display = ['date_of_delivery', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date', 'payment', 'paid', 'balance', 'is_paid','delivery_time', 'remarks']
-    search_fields = ['date_of_delivery', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date', 'payment', 'paid', 'balance', 'is_paid','delivery_time', 'remarks']
+    list_display = ['date_of_delivery', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date', 'payment', 'paid', 'balance', 'is_paid','delivered','delivery_time', 'remarks']
+    search_fields = ['date_of_delivery', 'order_time', 'name_of_client', 'quantity', 'occasion', 'rate', 'amount', 'date', 'payment', 'paid', 'balance', 'is_paid','delivered','delivery_time', 'remarks']
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
