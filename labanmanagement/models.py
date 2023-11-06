@@ -226,7 +226,7 @@ class DailyTotalMilk(models.Model):
         max_digits=10, decimal_places=3, default=0)
 
     @classmethod
-    def update_daily_total(cls, date, id):
+    def update_daily_total(cls, date, id=None):
         '''Signal to update daily total milk after each MilkProduction save or delete'''
         
         # Calculate and update the total milk for the given date
@@ -242,20 +242,20 @@ class DailyTotalMilk(models.Model):
             date=date).aggregate(total_qty=models.Sum('qty'))['total_qty']  or 0
         
         # Check for BulkOrder records with delivered unchecked for the given date
-        bulk_order_delivered = BulkOrder.objects.filter(date_of_delivery=date, id=id).values()
+        bulk_order_delivered = BulkOrder.objects.filter(date_of_delivery=date, id=id, delivered=True).values()
         print(bulk_order_delivered)
-        if bulk_order_delivered[0]['delivered']:
+        if bulk_order_delivered:
                 # Calculate the total sold milk when there are no records with delivered=False
             sold_milk_bulk_order = BulkOrder.objects.filter(
                 date_of_delivery=date, id=id).aggregate(total_sold=models.Sum('quantity'))['total_sold'] or 0
         else:
             sold_milk_bulk_order = 0
 
-        print("sold milk handle customer: ", sold_milk_handle_customer)
-        print("sold milk pay as you go: ",sold_milk_pay_as_you_go)
-        print("sold milk bulk: ", sold_milk_bulk_order)
+        # print("sold milk handle customer: ", sold_milk_handle_customer)
+        # print("sold milk pay as you go: ",sold_milk_pay_as_you_go)
+        # print("sold milk bulk: ", sold_milk_bulk_order)
         total_sold = sold_milk_pay_as_you_go + sold_milk_handle_customer + sold_milk_bulk_order
-        print("Total sold: ",total_sold)
+        # print("Total sold: ",total_sold)
 
         # Create or get the DailyTotalMilk instance for the date
         daily_total, created = cls.objects.get_or_create(date=date)
