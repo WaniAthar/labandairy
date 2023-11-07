@@ -165,13 +165,14 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="/">
                         <img src="{% static 'img/laban.png' %}" alt="Logo" width="90" height="" class="d-inline-block align-top">
                     </a>
+                    
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                        <div class="container">{% now "Y-m-d" %}</div>
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -179,7 +180,6 @@
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                         </li>
-
 
 
                         <!-- <div class="topbar-divider d-none d-sm-block"></div> -->
@@ -202,9 +202,7 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
