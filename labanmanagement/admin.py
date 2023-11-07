@@ -45,9 +45,9 @@ class BulkOrderAdmin(admin.ModelAdmin):
     
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['name', 'phone_no', 'qty',
-                    'rate', 'start_date', 'end_date']
+                    'rate','balance' ,'start_date', 'end_date']
     search_fields = ['name', 'phone_no', 'qty',
-                     'rate', 'start_date', 'end_date']
+                     'rate','balance' ,'start_date', 'end_date']
 
 
 class CowAdmin(admin.ModelAdmin):

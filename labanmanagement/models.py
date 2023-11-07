@@ -68,6 +68,7 @@ class Customer(models.Model):
         return f"{self.name}{self.phone_no}"
     qty = models.DecimalField(max_digits=10, decimal_places=3)
     rate = models.DecimalField(max_digits=10, decimal_places=3)
+    balance = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=0) #latest balance of the customer
     start_date = models.DateField(null=True, blank=True)  # Optional start date
     end_date = models.DateField(null=True, blank=True)    # Optional end date
     def __str__(self):
@@ -108,7 +109,6 @@ class HandleCustomer(models.Model):
             balance_after_payment = balance_before_payment - \
                 Decimal(str(self.paid))
             self.balance = balance_after_payment
-
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -351,76 +351,3 @@ class BulkOrder(models.Model):
         return f"{self.name_of_client}"
 
 
-#?###########################################################################
-#?###########################################################################
-#!########################### Django Signals ################################
-#!############################# Start Here ##################################
-#?###########################################################################
-#?###########################################################################
-@receiver(post_save, sender=MilkProduction)
-@receiver(post_delete, sender=MilkProduction)
-@receiver(post_save, sender=PayAsYouGoCustomer)
-@receiver(post_save, sender=HandleCustomer)
-@receiver(post_delete, sender=HandleCustomer)
-@receiver(post_delete, sender=PayAsYouGoCustomer)
-def update_daily_total_milk(sender, instance, **kwargs):
-    date = instance.date
-    DailyTotalMilk.update_daily_total(date)
-
-
-@receiver(post_delete, sender=BulkOrder)
-@receiver(post_save, sender=BulkOrder)
-def update_bulk_milk(sender, instance, **kwargs):
-    date = instance.date_of_delivery
-    id = instance.id
-    print(date)
-    DailyTotalMilk.update_daily_total(date, id)
-
-
-@receiver(post_save, sender=HandleCustomer)
-@receiver(post_delete, sender=HandleCustomer)
-def handle_customer_payment(sender, instance, **kwargs):
-    update_revenue_record(instance)
-
-
-@receiver(post_save, sender=PayAsYouGoCustomer)
-@receiver(post_delete, sender=PayAsYouGoCustomer)
-def pay_as_you_go_customer_payment(sender, instance, **kwargs):
-    update_revenue_record(instance)
-
-@receiver(post_save, sender=BulkOrder)
-@receiver(post_delete, sender=BulkOrder)
-def bulk_order_payment(sender, instance,**kwargs):
-    update_revenue_record(instance)
-
-def update_revenue_record(instance):
-    if hasattr(instance, 'date'):
-        revenue_record, _ = Revenue.objects.get_or_create(date=instance.date)
-        total_revenue = HandleCustomer.objects.filter(date=instance.date).aggregate(
-            total_revenue=models.Sum('paid'))['total_revenue']
-        total_revenue_pay_as_you_go = PayAsYouGoCustomer.objects.filter(
-            date=instance.date).aggregate(total_revenue=models.Sum('paid'))['total_revenue']
-        
-        total_revenue_bulk = BulkOrder.objects.filter(date=instance.date).aggregate(total_revenue=models.Sum('paid'))['total_revenue']
-
-        revenue_record.revenue = (total_revenue or 0) + \
-            (total_revenue_pay_as_you_go or 0) + (total_revenue_bulk or 0)
-        revenue_record.save()
-
-# signal to update the birthevent and Cow objects whenever a calf is added to the records
-@receiver(post_save, sender=Calf)
-def create_calf(sender, instance, created, **kwargs):
-    if created:
-        try:
-            birth_event = BirthEvent(date=instance.dob, calf_name=instance.nickname or "", dam=instance.dam, remarks=instance.remarks)
-            birth_event.save()
-        except birth_event.DoesNotExist:
-            pass
-
-        instance.dam.offspring.add(instance)
-    
-# signal to delete calf from the dam relation 
-@receiver(post_delete, sender=Calf)
-def delete_calf(sender, instance, **kwargs):
-    if instance.dam:
-        instance.dam.offspring.remove(instance)

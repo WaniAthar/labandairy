@@ -31,89 +31,105 @@ yesterday = today - timedelta(days = 1)
 def handle404Notfound(request, exception):
     return render(request, '404.html', status=404)
 
+class DashboardData:
+    def __init__(self, request):
+        self.request = request
+        self.today = today
+        self.yesterday = yesterday
+
+    def get_pending_bulk_orders(self):
+        one_day_before = self.today + timedelta(days=1)
+        pending_orders = BulkOrder.objects.filter(
+            date_of_delivery=one_day_before,
+            delivered=False,
+        )
+        reminder_messages = []
+        for order in pending_orders:
+            reminder_message = f"Don't forget! Order for <a href='{reverse('bulkorder')}'>{order.name_of_client}</a> is scheduled for delivery tomorrow."
+            reminder_messages.append(reminder_message)
+        messages.info(self.request, reminder_messages)
+
+    def get_total_milk_data(self):
+        dailyMilkObjects = DailyTotalMilk.objects
+        total_milk_today = dailyMilkObjects.filter(date=self.today).values_list('total_milk', flat=True).aggregate(sum=models.Sum('total_milk'))['sum'] or 0
+        sold_milk_today = dailyMilkObjects.filter(date=self.today).values_list('sold_milk', flat=True).aggregate(sum=models.Sum('sold_milk'))['sum'] or 0
+        unsold = dailyMilkObjects.filter(date=self.today).values_list('remaining_milk', flat=True).aggregate(sum=models.Sum('remaining_milk'))['sum'] or 0
+        # prev_day = (dailyMilkObjects.all().order_by("-date").exclude(id=dailyMilkObjects.last().id).first().total_milk) if dailyMilkObjects.exists() else 0
+        prev_day = dailyMilkObjects.filter(date=self.yesterday).values().first() or 0
+        if prev_day == 0:
+            percentage_prev_day_total_milk= 0
+            percentage_prev_day_sold_milk = 0
+        else:
+            percentage_prev_day_total_milk = round(((total_milk_today - prev_day['total_milk']) / prev_day['total_milk']) * 100, 2)
+            percentage_prev_day_sold_milk = round(((sold_milk_today - prev_day['sold_milk']) / prev_day['sold_milk']) * 100, 2)
+        return total_milk_today, sold_milk_today, unsold, percentage_prev_day_total_milk, percentage_prev_day_sold_milk
+
+    def get_customer_data(self):
+        pay_as_you_go_quantity = PayAsYouGoCustomer.objects.filter(date=self.today).aggregate(total_qty=models.Sum('qty'))["total_qty"]
+        subscription_sold_quantity = HandleCustomer.objects.filter(date=self.today).aggregate(total_qty=models.Sum('qty'))['total_qty']
+        customers = Customer.objects.all().count()
+        pay_as_you_go_customers = PayAsYouGoCustomer.objects.filter(date=self.today).count()
+        pending_payment_customers = Customer.objects.all().filter(balance__gt = 0).count()
+        pending_payment_payasyougo = PayAsYouGoCustomer.objects.filter(balance__gt=0).count()
+        pending_bulk_order_payment = BulkOrder.objects.all().filter(balance__gt=0).count()
+        pending_payments = pending_payment_customers + pending_payment_payasyougo + pending_bulk_order_payment
+
+        return pay_as_you_go_quantity, subscription_sold_quantity, customers, pay_as_you_go_customers, pending_payments
+
+    def get_balance_data(self):
+        balanceCustomer = Customer.objects.all().filter(balance__gt=0).aggregate(total_sum=models.Sum('balance'))['total_sum'] or 0
+        balancePayAsYouGo = PayAsYouGoCustomer.objects.all().filter(balance__gt=0).aggregate(total_sum=models.Sum('balance'))['total_sum'] or 0
+        balanceBulkOrder = BulkOrder.objects.all().filter(balance__gt=0).aggregate(total_sum=models.Sum('balance'))['total_sum'] or 0
+        balance = balancePayAsYouGo + balanceCustomer + balanceBulkOrder
+        return balance
+
+    def get_revenue_and_expenditure_data(self):
+        revenue = Revenue.objects.filter(date=self.today).values_list('revenue', flat=True).aggregate(sum=models.Sum('revenue'))['sum'] or 0
+        expenditure = Expenditure.objects.filter(date=self.today).values('amount').aggregate(sum=models.Sum('amount'))['sum'] or 0
+        return revenue, expenditure
+
+    def get_cow_data(self):
+        cowTagsQuerySet = Cow.objects.order_by('tag_id').values('tag_id')
+        milkPerCowTodayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.today).values('cow__tag_id', 'total_milk')
+        milkPerCowYesterdayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.yesterday).values('cow__tag_id', 'total_milk')
+        return cowTagsQuerySet, milkPerCowTodayQuerySet, milkPerCowYesterdayQuerySet
+
+    def get_dashboard_context(self):
+        self.get_pending_bulk_orders()
+        total_milk_today, sold_milk_today, unsold, percentage_prev_day_total_milk, percentage_prev_day_sold_milk = self.get_total_milk_data()
+        pay_as_you_go_quantity, subscription_sold_quantity, customers, pay_as_you_go_customers, pending_payments = self.get_customer_data()
+        balance = self.get_balance_data()
+        revenue, expenditure = self.get_revenue_and_expenditure_data()
+        cow_data = self.get_cow_data()
+
+        context = {
+            "total": total_milk_today,
+            "sold": sold_milk_today,
+            "unsold": unsold,
+            "percentage_total_milk": percentage_prev_day_total_milk,
+            "percentage_sold_milk": percentage_prev_day_sold_milk,
+            "subcription": subscription_sold_quantity,
+            "payasyougoqty": pay_as_you_go_quantity,
+            "customers": customers,
+            "payasyougocustomers": pay_as_you_go_customers,
+            "pendingpayments": pending_payments,
+            "balance": balance,
+            "revenue": revenue,
+            "expenditure": expenditure,
+            "cow_data": {
+                "tagId": cow_data[0],
+                "todayMilkPerCow": cow_data[1],
+                "yesterdayMilkPerCow": cow_data[2]
+            }
+        }
+        return context
+
+
+
 @login_required(login_url='/login')
 def dashboard(request):
-    one_day_before = today + timedelta(days=1)
-    pending_orders = BulkOrder.objects.filter(
-        date_of_delivery=one_day_before,
-        delivered=False,
-    )
-    for order in pending_orders:        
-        reminder_message = f"Don't forget! Order for <a href='{reverse('bulkorder')}'>{order.name_of_client}</a> is scheduled for delivery tomorrow."
-
-        messages.info(request, reminder_message)
-    dailyMilkObjects = DailyTotalMilk.objects
-    total_milk_today = dailyMilkObjects.filter(date=today).values_list('total_milk', flat=True).aggregate(sum=models.Sum('total_milk'))['sum'] or 0
-    sold_milk_today =dailyMilkObjects.filter(date=today).values_list('sold_milk', flat=True).aggregate(sum=models.Sum('sold_milk'))['sum'] or 0
-    unsold = dailyMilkObjects.filter(date=today).values_list('remaining_milk', flat=True).aggregate(sum=models.Sum('remaining_milk'))['sum'] or 0   
-    prev_day = (dailyMilkObjects.all().order_by(
-        "-date").exclude(id=dailyMilkObjects.last().id).first().total_milk) if dailyMilkObjects.exists() else 0   
-    if prev_day == 0:
-        percentage_prev_day = 0
-    else:
-        percentage_prev_day = round(((total_milk_today - prev_day)/prev_day) * 100, 2)
-    pay_as_you_go_quantity = PayAsYouGoCustomer.objects.filter(
-        date=today).aggregate(total_qty=models.Sum('qty'))["total_qty"]
-    subscription_sold_quantity = HandleCustomer.objects.filter(
-        date=today).aggregate(total_qty=models.Sum('qty'))['total_qty']
-    customers = Customer.objects.all().count()
-    pay_as_you_go_customers = PayAsYouGoCustomer.objects.filter(
-        date=today).count()
-    pending_payment_customers = Customer.objects.filter(
-        handlecustomer__balance__gt=0).count()
-    pending_payment_payasyougo = PayAsYouGoCustomer.objects.filter(
-        balance__gt=0).count()
-    pending_bulk_order_payment = BulkOrder.objects.filter(balance__gt=0).count()
-    pending_payments = pending_payment_customers + pending_payment_payasyougo + pending_bulk_order_payment
-    
-    print(pending_payment_customers)
-    print(pending_bulk_order_payment)
-    print(pending_payment_payasyougo)
-    '''
-    The below code is as good as executing this SQL query 
-    
-    SELECT max(id), account_id, balance, date
-    FROM labanmanagement_handlecustomer 
-    group by account_id;
-
-    '''
-    latest_ids = HandleCustomer.objects.filter(account=OuterRef('account')).values('account').annotate(
-    latest_id=models.Max('id')).values('latest_id')
-
-    latest_records = HandleCustomer.objects.filter(id__in=Subquery(latest_ids))
-
-    balanceCustomer = latest_records.values('id', 'account__id', 'balance', 'date').aggregate(balance=models.Sum('balance'))['balance'] or 0
-    balancePayAsYouGo = PayAsYouGoCustomer.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum'] or 0
-    balanceBulkOrder = BulkOrder.objects.all().aggregate(total_sum = models.Sum('balance'))['total_sum'] or 0
-    balance = balancePayAsYouGo + balanceCustomer + balanceBulkOrder
-
-    revenue= Revenue.objects.filter(date=today).values_list('revenue', flat=True).aggregate(sum=models.Sum('revenue'))['sum'] or 0
-    expenditure = Expenditure.objects.filter(date=today).values('amount').aggregate(sum=models.Sum('amount'))['sum'] or 0
-
-    cowTagsQuerySet = Cow.objects.order_by('tag_id').values('tag_id')
-    milkPerCowTodayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=today).values('cow__tag_id','total_milk')
-    milkPerCowYesterdayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=yesterday).values('cow__tag_id','total_milk')
-   
-    
-    context = {
-    "total": total_milk_today,
-    "sold": sold_milk_today,
-    "unsold": unsold,
-    "percentage": percentage_prev_day,
-    "subcription": subscription_sold_quantity,
-    "payasyougoqty": pay_as_you_go_quantity,
-    "customers": customers,
-    "payasyougocustomers": pay_as_you_go_customers,
-    "pendingpayments": pending_payments,
-    "balance":balance,
-    "revenue":revenue,
-    "expenditure":expenditure,
-    "cow_data":{
-        "tagId":cowTagsQuerySet,
-        "todayMilkPerCow":milkPerCowTodayQuerySet,
-        "yesterdayMilkPerCow":milkPerCowYesterdayQuerySet
-    }
-    }
+    dashboard_data = DashboardData(request)
+    context = dashboard_data.get_dashboard_context()
     return render(request, 'dashboard.html', context)
 
 
@@ -191,10 +207,6 @@ def calves(request):
     return render(request, "calves.html", context)
 
 
-def milkProductionCow(request):
-    return HttpResponse("{'hello':'hello'}")
-
-
 def milkProductionDaily(request):
     milk_production = DailyTotalMilk.objects.order_by("-date").all()
     context = {"totalmilk":milk_production}
@@ -261,18 +273,10 @@ def handleCustomerAccounts(request, slug):
     return render(request, 'handleCustomerAccounts.html', context)
 
 
-def milkrecord(request, slug):
-    return HttpResponse('milk record page')
-
-
-def medication(request):
-    return HttpResponse('this is the medication page')
-
 def medicationCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
     medication_record = Medication.objects.filter(cows__id=slug).order_by('-date').values("date", 'Diagnosis', 'Medication', 'doctor', 'remarks')
-    print(medication_record)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"
     else:
