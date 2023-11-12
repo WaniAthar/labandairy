@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from labanmanagement.models import *
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 
 
 # ///TODO: Make pages for the navigations

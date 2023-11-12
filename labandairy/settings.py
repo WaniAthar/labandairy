@@ -13,6 +13,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SESSION_COOKIE_AGE = 86400
+
+SESSION_SAVE_EVERY_REQUEST = True
+
 INSTALLED_APPS = [
     # 'admin_soft.apps.AdminSoftDashboardConfig',
     'django.contrib.admin',
