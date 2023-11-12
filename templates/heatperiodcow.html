@@ -1,56 +1,71 @@
 {% extends "base.html" %}
 {% block title %}{{slug}}'s Heat Period{% endblock title %}
 {% block body %}
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Heat Period</h6>
-                            <p>The basic estrous cycle of the cow averages 21 days in duration (a range of 18 to 24 days) and extends from one period of heat (estrus) to the next. There are four parts to the estrous cycle. Proestrus lasts for one to three days immediately before the cow comes into estrus or heat. Metestrus is the three to four days after estrus, and diestrus is the 12 to 15 days in the middle of the cycle.</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Remarks</th>                                           
-                                            <!-- <th>Remarks</th>                                             -->
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody class="no-sorting">
-                                        {% for data in heat_period %}
-                                        <tr>
-                                            <td>{{data.start_date}}</td>
-                                            <td>{{data.end_date}}</td>
-                                            <td>{{data.remarks}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Heat Period</h6>
+                        <p>The basic estrous cycle of the cow averages 21 days in duration (a range of 18 to 24 days)
+                            and extends from one period of heat (estrus) to the next. There are four parts to the
+                            estrous cycle. Proestrus lasts for one to three days immediately before the cow comes into
+                            estrus or heat. Metestrus is the three to four days after estrus, and diestrus is the 12 to
+                            15 days in the middle of the cycle.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Remarks</th>
+                                        <!-- <th>Remarks</th>                                             -->
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody class="no-sorting">
+                                    {% for data in heat_period %}
+                                    <tr>
+                                        <td>{{data.start_date}}</td>
+                                        <td>{{data.end_date}}</td>
+                                        <td>{{data.remarks}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>          
+                </div>
             </div>
-
         </div>
 
     </div>
+
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable("#dataTable")) {
+            $("#dataTable").DataTable({
+                ordering: false,
+            });
+        }
+    });
+</script>
+{% endblock scriptTable %}
 {% endblock body %}

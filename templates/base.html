@@ -267,18 +267,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
-        <!-- //////////////// -->
-        <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
-        <!-- <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script> -->
-        <!-- <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script> -->
+        
         <!-- Page level custom scripts -->
-        <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
-        <!-- Page level plugins -->
-        <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-        <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+        
+        {% block scriptTable %}{% endblock scriptTable %}
         
 
 </body>

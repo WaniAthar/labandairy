@@ -52,4 +52,15 @@
         </div>
 
     </div>
+    {% block scriptTable %}
+<script>
+    $(document).ready(function () {
+      if (!$.fn.DataTable.isDataTable("#dataTable")) {
+        $("#dataTable").DataTable({
+            ordering: false,
+        });
+      }
+    });
+  </script>
+{% endblock scriptTable %}
 {% endblock body %}

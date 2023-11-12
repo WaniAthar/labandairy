@@ -1,57 +1,70 @@
 {% extends "base.html" %}
 {% block title %}{{slug}}'s Dry Period{% endblock title %}
 {% block body %}
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Dry Period</h6>
-                            <p>With a 12- to 13-month calving interval, a dry period of 45 to 65 days is recommended. Generally, longer or shorter dry periods depress milk production in the next lactation. First-calf heifers need a maximum dry period of 60 to 65 days; older cows need fewer dry days.</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Remarks</th>                                    
-                                            <!-- <th>Remarks</th>                                             -->
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Remarks</th>  
-                                        </tr>
-                                    </tfoot>
-                                    <tbody class="no-sorting">
-                                        {% for data in dryperiod%}
-                                        <tr>
-                                            <td>{{data.start_date}}</td>
-                                            <td>{{data.end_date}}</td>
-                                            <td>{{data.remarks}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Dry Period</h6>
+                        <p>With a 12- to 13-month calving interval, a dry period of 45 to 65 days is recommended.
+                            Generally, longer or shorter dry periods depress milk production in the next lactation.
+                            First-calf heifers need a maximum dry period of 60 to 65 days; older cows need fewer dry
+                            days.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Remarks</th>
+                                        <!-- <th>Remarks</th>                                             -->
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody class="no-sorting">
+                                    {% for data in dryperiod%}
+                                    <tr>
+                                        <td>{{data.start_date}}</td>
+                                        <td>{{data.end_date}}</td>
+                                        <td>{{data.remarks}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>          
+                </div>
             </div>
-
         </div>
 
     </div>
-   
+
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable("#dataTable")) {
+            $("#dataTable").DataTable({
+                ordering: false,
+            });
+        }
+    });
+</script>
+{% endblock scriptTable %}
 {% endblock body %}

@@ -20,6 +20,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>Delivery Date</th>
                                             <th>Date</th>
                                             <th>Order time</th>
                                             <th>Customer name</th>
@@ -27,7 +28,6 @@
                                             <th>Occasion</th>
                                             <th>Rate</th>
                                             <th>Amount</th>
-                                            <th>Date of delivery</th>
                                             <th>Payment</th>
                                             <th>Paid</th>
                                             <th>Balance</th>
@@ -38,7 +38,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Date of delivery</th>
+                                            <th>Delivery Date</th>
                                             <th>Date</th>
                                             <th>Order time</th>
                                             <th>Customer name</th>
@@ -53,7 +53,7 @@
                                             <th>Remarks</th>
                                         </tr>
                                     </tfoot>
-                                    <tbody class="no-sorting">
+                                    <tbody >
                                         {% for data in bulkorder%}
                                         <tr>
                                             <td>{{data.date_of_delivery}}</td>
@@ -82,4 +82,15 @@
         </div>
 
     </div>
+    {% block scriptTable %}
+<script>
+    $(document).ready(function () {
+      if (!$.fn.DataTable.isDataTable("#dataTable")) {
+        $("#dataTable").DataTable({
+            ordering: false,
+        });
+      }
+    });
+  </script>
+{% endblock scriptTable %}
 {% endblock body %}

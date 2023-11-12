@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from labanmanagement.models import *
-from datetime import date, timedelta
-from django.db.models import OuterRef, Subquery
+from datetime import date, timedelta, datetime
+
 
 # ///TODO: Make pages for the navigations
 # ///!BUG: FIX the alignment of the cards in dashboard.html
@@ -15,7 +15,6 @@ from django.db.models import OuterRef, Subquery
 # ///!BUG: Milk sold record not updating automatically
 # TODO: Automatic Backup of Database everyday
 # TODO: Downloadable data in excel
-
 
 
 #?###########################################################
@@ -134,7 +133,7 @@ def dashboard(request):
 
 
 def customers(request):
-    customers_data_query = Customer.objects.values('id', 'name', 'phone_no', 'qty', 'rate', 'start_date', 'end_date')
+    customers_data_query = Customer.objects.values().order_by('-start_date')
     context = {
         "customer":customers_data_query
     }
@@ -143,16 +142,11 @@ def customers(request):
 
 
 def pay_as_you_go(request):
-    customers = PayAsYouGoCustomer.objects.values()
+    customers = PayAsYouGoCustomer.objects.values().order_by('-date')
     context = {
         'customer':customers
     }
     return render(request, 'payasyougo.html', context)
-
-
-def extras(request):
-    return render(request, "tables.html")
-
 
 def handlelogin(request):
     if request.user.is_authenticated:
@@ -182,9 +176,7 @@ def handlelogout(request):
 
 
 def cows(request):
-    allCows = Cow.objects.all().values('id','tag_id', 'nickname', 'date_of_arrival', 'offspring', 'breed', 'remarks')
-    print(allCows)
-   
+    allCows = Cow.objects.all().values('id','tag_id', 'nickname', 'date_of_arrival', 'offspring', 'breed', 'remarks').order_by('id')
     context = {
         'cows':allCows
     }
@@ -199,8 +191,7 @@ def handleOffspring(request, slug):
     return render(request, "handleOffspring.html", context)
 
 def calves(request):
-    calves = Calf.objects.all().values('tag_id', 'nickname', 'dob', 'dam', 'father','breed', 'remarks', 'id', 'dam__id')
-    print(calves)
+    calves = Calf.objects.all().values('tag_id', 'nickname', 'dob', 'dam', 'father','breed', 'remarks', 'id', 'dam__id').order_by('tag_id')
     context = {
         "calf":calves
     }
@@ -208,7 +199,7 @@ def calves(request):
 
 
 def milkProductionDaily(request):
-    milk_production = DailyTotalMilk.objects.order_by("-date").all()
+    milk_production = DailyTotalMilk.objects.all().order_by('-date').values()
     context = {"totalmilk":milk_production}
     return render(request, "milkproductiondaily.html", context)
 
@@ -250,7 +241,7 @@ def handlecows(request, slug):
 
 
 def handleCustomerAccounts(request, slug):
-    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date').order_by('-date')  #!++++++out of order date (unsorted)+++++++
+    customer = HandleCustomer.objects.filter(account__id=slug).values('qty', 'rate', 'amount', 'balance', 'remarks','paid','date').order_by('-date')
     end_date_of_customer = Customer.objects.filter(id=slug).values('end_date')[0]['end_date'] 
     name = Customer.objects.filter(id=slug).values('name')[0]['name'].capitalize()
     customer_data = [
@@ -291,7 +282,7 @@ def medicationCow(request, slug):
 def milkRecordCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
-    milk_record = MilkProduction.objects.filter(cow_id=slug).order_by('-date').values()    #fetching all values
+    milk_record = MilkProduction.objects.filter(cow_id=slug).order_by('-date').values()
     print(milk_record)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"
@@ -361,10 +352,8 @@ def bulkorder(request):
     for order in pending_orders:
 
         reminder_message = f"Don't forget! Order for <a href='{reverse('bulkorder')}'>{order.name_of_client}</a> is scheduled for delivery tomorrow."
-        print(reminder_message)
         messages.info(request, reminder_message)
 
-    orderes = BulkOrder.objects.all().values()
-
-    context = {'bulkorder':orderes}
+    orders = BulkOrder.objects.all().values().order_by('-date_of_delivery')
+    context = {'bulkorder':orders}
     return render(request, 'bulkorder.html', context)

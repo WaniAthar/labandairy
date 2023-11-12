@@ -2,84 +2,91 @@
 {% block title %}{{name}}'s record{% endblock title %}
 
 {% block body %}
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">{{name}}'s record</h6>
-                            {% if end_date %}
-                            <h6 class="m-0 font-weight-bold text-warning">Account closed on {{end_date}}</h6>
-                            {% else %}
-                            <h6 class="m-0 font-weight-bold text-warning">Account open</h6>
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">{{name}}'s record</h6>
+                        {% if end_date %}
+                        <h6 class="m-0 font-weight-bold text-warning">Account closed on {{end_date}}</h6>
+                        {% else %}
+                        <h6 class="m-0 font-weight-bold text-warning">Account open</h6>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <!-- <table class="table table-bordered" id="table_customer" width="100%" cellspacing="0"> -->
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Quantity</th>
-                                            <th>Rate</th>
-                                            <th>Amount</th>
-                                            <th>Paid</th>
-                                            <th>Balance</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Quantity</th>
-                                            <th>Rate</th>
-                                            <th>Amount</th>
-                                            <th>Paid</th>
-                                            <th>Balance</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for data in customer %}
-                                        <tr>
-                                            <td>{{data.date}}</td>
-                                            <td>{{data.qty}}</td>
-                                            <td>₹{{data.rate}} l</td>
-                                            <td>₹{{data.amount}}</td>
-                                            <td>₹{{data.paid}}</td>
-                                            <td class="{% if forloop.first and data.balance > 0 %}text-danger{% elif forloop.first and data.balance <= 0 %}text-success{% endif %}">₹{{ data.balance }}</td>
-                                            <td>{{data.remarks}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Quantity</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Paid</th>
+                                        <th>Balance</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Quantity</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Paid</th>
+                                        <th>Balance</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    {% for data in customer %}
+                                    <tr>
+                                        <td>{{data.date}}</td>
+                                        <td>{{data.qty}}</td>
+                                        <td>₹{{data.rate}} l</td>
+                                        <td>₹{{data.amount}}</td>
+                                        <td>₹{{data.paid}}</td>
+                                        <td
+                                            class="{% if forloop.first and data.balance > 0 %}text-danger{% elif forloop.first and data.balance <= 0 %}text-success{% endif %}">
+                                            ₹{{ data.balance }}</td>
+                                        <td>{{data.remarks}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <!-- Date Main Content -->
-                        
                 </div>
-                <!-- Date Content Wrapper -->
-                <!-- /.container-fluid -->
+                <!-- Date Main Content -->
 
-                <!-- Date Page Wrapper -->            
             </div>
+            <!-- Date Content Wrapper -->
+            <!-- /.container-fluid -->
 
+            <!-- Date Page Wrapper -->
         </div>
 
     </div>
-    <script>
-        var table = $('#dataTable').DataTable({
-            buttons:['copy', 'csv', 'excel', 'pdf', 'print']
-        });
-        table.buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)')
-    </script>
+
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable("#dataTable")) {
+            $("#dataTable").DataTable({
+                ordering: false,
+            });
+        }
+    });
+</script>
+{% endblock scriptTable %}
 {% endblock body %}

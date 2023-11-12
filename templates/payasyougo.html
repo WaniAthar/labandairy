@@ -1,67 +1,80 @@
 {% extends "base.html" %}
 {% block title %}Pay as you go Customers{% endblock title %}
 {% block body %}
-    <div id="wrapper">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <div class="container-fluid">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Pay as you go customers</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Rate</th>
-                                            <th>Amount</th>
-                                            <th>Paid</th>
-                                            <th>Balance</th>
-                                            <th>Remarks</th>
-                                            <th>Payment date</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Rate</th>
-                                            <th>Amount</th>
-                                            <th>Paid</th>
-                                            <th>Balance</th>
-                                            <th>Remarks</th>
-                                            <th>Payment date</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for data in customer %}
-                                        <tr>
-                                            <td>{{data.name}}</td>
-                                            <td>{{data.qty}}</td>
-                                            <td>₹{{data.rate}} l</td>
-                                            <td>₹{{data.amount}}</td>
-                                            <td>₹{{data.paid}}</td>
-                                            <td>₹{{data.balance}}</td>
-                                            <td>{{data.remarks}}</td>
-                                            <td>{{data.payment_date}}</td>
-                                            <td>{{data.date}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+<div id="wrapper">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">Pay as you go customers</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Paid</th>
+                                        <th>Balance</th>
+                                        <th>Remarks</th>
+                                        <th>Payment date</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Paid</th>
+                                        <th>Balance</th>
+                                        <th>Remarks</th>
+                                        <th>Payment date</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    {% for data in customer %}
+                                    <tr>
+                                        <td>{{data.name}}</td>
+                                        <td>{{data.qty}}</td>
+                                        <td>₹{{data.rate}} l</td>
+                                        <td>₹{{data.amount}}</td>
+                                        <td>₹{{data.paid}}</td>
+                                        <td>₹{{data.balance}}</td>
+                                        <td>{{data.remarks}}</td>
+                                        <td>{{data.payment_date}}</td>
+                                        <td>{{data.date}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>           
+                </div>
             </div>
-
         </div>
-
     </div>
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+      if (!$.fn.DataTable.isDataTable("#dataTable")) {
+        $("#dataTable").DataTable({
+          // Add any DataTable options here
+          columnDefs: [
+            { type: 'string', targets: 0 } // Assuming the first column is the names column
+          ],
+          order: [[0, 'asc']] // Sorting by the first column in ascending order by default
+        });
+      }
+    });
+  </script>
+{% endblock scriptTable %}
 {% endblock body %}

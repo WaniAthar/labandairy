@@ -5,7 +5,6 @@ urlpatterns = [
     path('customers', views.customers, name='customers'),
     path('customers/<str:slug>', views.handleCustomerAccounts, name='handleCustomerAccounts'),
     path('payasyougo', views.pay_as_you_go, name="payAsYouGo"),
-    path('extras', views.extras, name='extras'),
     path('login', views.handlelogin, name='login'),
     path('logout', views.handlelogout, name='logout'),
     path('milkProductionDaily', views.milkProductionDaily, name='milkProductionDaily'),

@@ -1,75 +1,85 @@
 {% extends "base.html" %}
 {% block title %}Cows{% endblock title %}
 {% block body %}
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Cows</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Tag id</th>
-                                            <th>Nickname</th>
-                                            <th>Date of arrival</th>
-                                            <th>Offspring</th>
-                                            <th>Breed</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Tag id</th>
-                                            <th>Nickname</th>
-                                            <th>Date of arrival</th>
-                                            <th>Offspring</th>
-                                            <th>Breed</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for data in cows %}
-                                        <tr>
-                                            <td><a href="cows/{{data.id}}">{{data.tag_id}}</a></td>
-                                            {% if data.nickname %}
-                                            <td>{{data.nickname}}</td>
-                                            {% else %}
-                                            <td>No nickname</td>
-                                            {% endif %}
-                                            <td>{{data.date_of_arrival}}</td>
-                                            {% if data.offspring %}
-                                            <td><a href="cows/offSpring/{{data.id}}">Click here</a></td>
-                                            {% else %}
-                                            <td>No offspring</td>
-                                            {% endif %}
-                                            <td>{{data.breed}}</td>
-                                            {% if data.remarks %}
-                                            <td>{{data.remarks}}</td>
-                                            {% else %}
-                                            <td>No remarks</td>
-                                            {% endif %}
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">Cows</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Tag id</th>
+                                        <th>Nickname</th>
+                                        <th>Date of arrival</th>
+                                        <th>Offspring</th>
+                                        <th>Breed</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Tag id</th>
+                                        <th>Nickname</th>
+                                        <th>Date of arrival</th>
+                                        <th>Offspring</th>
+                                        <th>Breed</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    {% for data in cows %}
+                                    <tr>
+                                        <td><a href="cows/{{data.id}}">{{data.tag_id}}</a></td>
+                                        {% if data.nickname %}
+                                        <td>{{data.nickname}}</td>
+                                        {% else %}
+                                        <td>No nickname</td>
+                                        {% endif %}
+                                        <td>{{data.date_of_arrival}}</td>
+                                        {% if data.offspring %}
+                                        <td><a href="cows/offSpring/{{data.id}}">Click here</a></td>
+                                        {% else %}
+                                        <td>No offspring</td>
+                                        {% endif %}
+                                        <td>{{data.breed}}</td>
+                                        {% if data.remarks %}
+                                        <td>{{data.remarks}}</td>
+                                        {% else %}
+                                        <td>No remarks</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>          
+                </div>
             </div>
-
         </div>
 
     </div>
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable("#dataTable")) {
+            $("#dataTable").DataTable({
+                ordering: false,
+            });
+        }
+    });
+</script>
+{% endblock scriptTable %}
 {% endblock body %}

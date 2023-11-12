@@ -1,66 +1,77 @@
 {% extends "base.html" %}
 {% block title %}{{slug}}'s Milk Record{% endblock title %}
 {% block body %}
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Milk Record</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Morning Milk Quantity</th>
-                                            <th>Evening Milk Quantity</th>
-                                            <th>Morning time</th>
-                                            <th>Evening time</th>
-                                            <th>Total Milk</th>                                            
-                                            <!-- <th>Remarks</th>                                             -->
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Morning Milk Quantity</th>
-                                            <th>Evening Milk Quantity</th>
-                                            <th>Morning time</th>
-                                            <th>Evening time</th>
-                                            <th>Total Milk</th>
-                                            <!-- <th>Remarks</th> -->
-                                        </tr>
-                                    </tfoot>
-                                    <tbody class="no-sorting">
-                                        {% for data in milk%}
-                                        <tr>
-                                            <td>{{data.date}}</td>
-                                            <td>{{data.morning_milk_quantity}}</td>
-                                            <td>{{data.evening_milk_quantity}}</td>
-                                            <td>{{data.morning_time}}</td>
-                                            <td>{{data.evening_time}}</td>
-                                            <td>{{data.total_milk}}</td>
-                                            <!-- <td>{{data.remarks}}</td> -->
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">{{tag}}'s Milk Record</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Morning Milk Quantity</th>
+                                        <th>Evening Milk Quantity</th>
+                                        <th>Morning time</th>
+                                        <th>Evening time</th>
+                                        <th>Total Milk</th>
+                                        <!-- <th>Remarks</th>                                             -->
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Morning Milk Quantity</th>
+                                        <th>Evening Milk Quantity</th>
+                                        <th>Morning time</th>
+                                        <th>Evening time</th>
+                                        <th>Total Milk</th>
+                                        <!-- <th>Remarks</th> -->
+                                    </tr>
+                                </tfoot>
+                                <tbody class="no-sorting">
+                                    {% for data in milk%}
+                                    <tr>
+                                        <td>{{data.date}}</td>
+                                        <td>{{data.morning_milk_quantity}}</td>
+                                        <td>{{data.evening_milk_quantity}}</td>
+                                        <td>{{data.morning_time}}</td>
+                                        <td>{{data.evening_time}}</td>
+                                        <td>{{data.total_milk}}</td>
+                                        <!-- <td>{{data.remarks}}</td> -->
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>          
+                </div>
             </div>
-
         </div>
 
     </div>
+
+</div>
+{% block scriptTable %}
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable("#dataTable")) {
+            $("#dataTable").DataTable({
+                ordering: false,
+            });
+        }
+    });
+</script>
+{% endblock scriptTable %}
 {% endblock body %}
