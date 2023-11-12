@@ -5,9 +5,9 @@ from django.db import models
 
 
 class HandleCustomerAdmin(admin.ModelAdmin):
-    list_display = ['account', 'rate', 'amount',
+    list_display = ['account__name', 'rate', 'amount',
                     'qty', 'paid', 'balance', 'remarks', 'date']
-    search_fields = ['account__name','account', 'rate', 'amount',
+    search_fields = ['account__name', 'rate', 'amount',
                     'qty', 'paid', 'balance', 'remarks', 'date']  # Allow searching by Customer name
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size': '100'})},
