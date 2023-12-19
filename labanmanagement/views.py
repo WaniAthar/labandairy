@@ -124,7 +124,6 @@ def customers(request):
     context = {
         "customer":customers_data_query
     }
-    # print(customers_data)
     return render(request, 'customer.html', context)
 
 
@@ -171,7 +170,6 @@ def cows(request):
 
 def handleOffspring(request, slug):
     calves = Calf.objects.filter(dam__id=slug)
-    print(calves)
     context = {
         'calf':calves
     } 
@@ -270,7 +268,6 @@ def milkRecordCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
     milk_record = MilkProduction.objects.filter(cow_id=slug).order_by('-date').values()
-    print(milk_record)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"
     else:
@@ -286,7 +283,6 @@ def birthEventCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
     birthEvent = BirthEvent.objects.filter(dam_id=slug).order_by('-date').values()
-    print(birthEvent)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"
     else:
@@ -303,7 +299,6 @@ def heatPeriodsCow(request, slug):
     cow_tag = Cow.objects.filter(id=slug).values('tag_id')[0]['tag_id']
     cow_name = Cow.objects.filter(id=slug).values('nickname')[0]['nickname']
     heat_period = HeatPeriod.objects.filter(cow_id=slug).order_by('-start_date').values()
-    print(heat_period)
     if cow_name:
         tag = cow_name+f" ({cow_tag})"
     else:
