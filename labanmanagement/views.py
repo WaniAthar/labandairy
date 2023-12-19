@@ -7,16 +7,6 @@ from labanmanagement.models import *
 from datetime import date, timedelta
 
 
-# ///TODO: Make pages for the navigations
-# ///!BUG: FIX the alignment of the cards in dashboard.html
-# ///!BUG: When customer table is updated, daily total milk record doesnt get updated
-# TODO: Test the website
-# ///TODO: Add filter to the charts
-# ///!BUG: Milk sold record not updating automatically
-# TODO: Automatic Backup of Database everyday
-# TODO: Downloadable data in excel
-
-
 #?###########################################################
 #?###########################################################
 #!######################### VIEWS ###########################
@@ -24,17 +14,14 @@ from datetime import date, timedelta
 #?###########################################################
 #?###########################################################
 
-today = date.today()
-yesterday = today - timedelta(days = 1)
-
 def handle404Notfound(request, exception):
     return render(request, '404.html', status=404)
 
 class DashboardData:
     def __init__(self, request):
+        self.yesterday = today - timedelta(days = 1)
         self.request = request
-        self.today = today
-        self.yesterday = yesterday
+        self.today = date.today()
 
     def get_pending_bulk_orders(self):
         one_day_before = self.today + timedelta(days=1)

@@ -22,6 +22,7 @@
                         {% endif %}
                     </div>
                     <div class="card-body">
+                        <button type="button" class="btn btn-outline-success my-2" onclick="generatePDF()" >Download Data</button>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <!-- <table class="table table-bordered" id="table_customer" width="100%" cellspacing="0"> -->
@@ -76,9 +77,26 @@
         </div>
 
     </div>
-
+    
 </div>
 {% block scriptTable %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    import { jsPDF } from "jspdf";
+    function generatePDF() {
+        // Create a new jsPDF instance
+        const pdf = new jsPDF();
+
+        // Get the title of the page
+        const pageTitle = document.title;
+
+        // Add content to the PDF (in this case, the HTML table)
+        pdf.autoTable({ html: '#dataTable' });
+
+        // Save the PDF with the title of the page as the file name
+        pdf.save(`${pageTitle}.pdf`);
+    }
+</script>
 <script>
     $(document).ready(function () {
         if (!$.fn.DataTable.isDataTable("#dataTable")) {
@@ -88,5 +106,6 @@
         }
     });
 </script>
+
 {% endblock scriptTable %}
 {% endblock body %}
