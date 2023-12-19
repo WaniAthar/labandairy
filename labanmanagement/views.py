@@ -19,9 +19,9 @@ def handle404Notfound(request, exception):
 
 class DashboardData:
     def __init__(self, request):
-        self.yesterday = today - timedelta(days = 1)
         self.request = request
         self.today = date.today()
+        self.yesterday = self.today - timedelta(days = 1)
 
     def get_pending_bulk_orders(self):
         one_day_before = self.today + timedelta(days=1)
