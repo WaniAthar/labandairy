@@ -42,10 +42,12 @@ class DashboardData:
         unsold = dailyMilkObjects.filter(date=self.today).values_list('remaining_milk', flat=True).aggregate(sum=models.Sum('remaining_milk'))['sum'] or 0
         # prev_day = (dailyMilkObjects.all().order_by("-date").exclude(id=dailyMilkObjects.last().id).first().total_milk) if dailyMilkObjects.exists() else 0
         prev_day = dailyMilkObjects.filter(date=self.yesterday).values().first() or 0
-        if prev_day == 0:
+        if prev_day['sold_milk'] == 0 or prev_day['total_milk'] == 0:
             percentage_prev_day_total_milk= 0
             percentage_prev_day_sold_milk = 0
         else:
+            print(prev_day['sold_milk'])
+            print(prev_day['total_milk'])
             percentage_prev_day_total_milk = round(((total_milk_today - prev_day['total_milk']) / prev_day['total_milk']) * 100, 2)
             percentage_prev_day_sold_milk = round(((sold_milk_today - prev_day['sold_milk']) / prev_day['sold_milk']) * 100, 2)
         return total_milk_today, sold_milk_today, unsold, percentage_prev_day_total_milk, percentage_prev_day_sold_milk
