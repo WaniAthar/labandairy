@@ -83,8 +83,8 @@ class DashboardData:
 
     def get_cow_data(self):
         cowTagsQuerySet = Cow.objects.order_by('tag_id').values('tag_id')
-        milkPerCowTodayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.today).values('cow__tag_id', 'total_milk')
-        milkPerCowYesterdayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.yesterday).values('cow__tag_id', 'total_milk')
+        milkPerCowTodayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.today).values('cow__tag_id', 'total_milk') or None
+        milkPerCowYesterdayQuerySet = MilkProduction.objects.order_by('cow__tag_id').filter(date=self.yesterday).values('cow__tag_id', 'total_milk') or None
         return cowTagsQuerySet, milkPerCowTodayQuerySet, milkPerCowYesterdayQuerySet
 
     def get_dashboard_context(self):
