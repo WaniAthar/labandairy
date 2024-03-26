@@ -6,6 +6,7 @@ from .models import *
 #!############################# Start Here ##################################
 #?###########################################################################
 #?###########################################################################
+
 @receiver(post_save, sender=MilkProduction)
 @receiver(post_delete, sender=MilkProduction)
 @receiver(post_save, sender=PayAsYouGoCustomer)
