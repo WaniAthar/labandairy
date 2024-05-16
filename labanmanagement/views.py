@@ -333,6 +333,7 @@ def dryPeriodsCow(request, slug):
     return render(request, 'dryperiodcow.html', context)
 
 def bulkorder(request):
+    today = date.today()
     one_day_before = today + timedelta(days=1)
     pending_orders = BulkOrder.objects.filter(
         date_of_delivery=one_day_before,
